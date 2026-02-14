@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World Quiz - Capital Cities Challenge</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e1a;
+            --bg-secondary: #151b2e;
+            --bg-card: #1a2238;
+            --accent-primary: #00d4aa;
+            --accent-secondary: #7b68ee;
+            --text-primary: #e8edf5;
+            --text-secondary: #8b9bb4;
+            --correct: #00ff88;
+            --error: #ff4466;
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(123, 104, 238, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(0, 212, 170, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        #root {
+            position: relative;
+            z-index: 1;
+        }
+
+        .app-container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .logo {
+            font-size: 48px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+            letter-spacing: -1px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: var(--text-secondary);
+            font-family: 'Space Mono', monospace;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .progress-bar {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px 28px;
+            margin-bottom: 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .progress-bar:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .progress-stat {
+            text-align: center;
+        }
+
+        .progress-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .progress-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+            font-family: 'Space Mono', monospace;
+        }
+
+        .progress-value.accent {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .divider {
+            width: 1px;
+            height: 50px;
+            background: var(--border);
+        }
+
+        .quiz-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 48px 40px;
+            margin-bottom: 28px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .quiz-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .quiz-card:hover::before {
+            opacity: 1;
+        }
+
+        .quiz-card.correct {
+            border-color: var(--correct);
+            animation: correctPulse 0.5s ease;
+        }
+
+        .quiz-card.incorrect {
+            border-color: var(--error);
+            animation: shake 0.4s ease;
+        }
+
+        @keyframes correctPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .country-name {
+            font-size: 36px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--text-primary);
+            letter-spacing: -0.5px;
+            animation: slideDown 0.4s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .capital-input {
+            width: 100%;
+            padding: 20px 24px;
+            font-size: 20px;
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .capital-input::placeholder {
+            color: var(--text-secondary);
+            opacity: 0.6;
+        }
+
+        .capital-input:focus {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 4px rgba(0, 212, 170, 0.1);
+        }
+
+        .capital-input.correct {
+            border-color: var(--correct);
+            background: rgba(0, 255, 136, 0.05);
+        }
+
+        .capital-input.incorrect {
+            border-color: var(--error);
+            background: rgba(255, 68, 102, 0.05);
+        }
+
+        .feedback {
+            margin-top: 16px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+            min-height: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .feedback.correct {
+            color: var(--correct);
+        }
+
+        .feedback.incorrect {
+            color: var(--error);
+        }
+
+        .restart-button {
+            width: 100%;
+            padding: 18px 32px;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: var(--bg-primary);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .restart-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .restart-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 212, 170, 0.3);
+        }
+
+        .restart-button:hover::before {
+            left: 100%;
+        }
+
+        .restart-button:active {
+            transform: translateY(0);
+        }
+
+        .region-filter {
+            margin-bottom: 32px;
+        }
+
+        .filter-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .region-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .region-button {
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .region-button:hover {
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .region-button.selected {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            border-color: var(--accent-primary);
+            color: var(--bg-primary);
+        }
+
+        .all-regions-button {
+            width: 100%;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .all-regions-button:hover {
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .all-regions-button.active {
+            background: var(--bg-card);
+            border-color: var(--accent-secondary);
+        }
+
+        .region-count {
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 16px;
+        }
+
+        .region-count .count {
+            color: var(--accent-primary);
+            font-weight: 600;
+        }
+
+        .completion-screen {
+            text-align: center;
+            animation: fadeIn 0.6s ease;
+        }
+
+        .completion-icon {
+            font-size: 80px;
+            margin-bottom: 24px;
+            animation: bounce 1s ease infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .completion-title {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .completion-message {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 600px) {
+            .app-container {
+                padding: 40px 16px;
+            }
+
+            .logo {
+                font-size: 36px;
+            }
+
+            .country-name {
+                font-size: 28px;
+            }
+
+            .capital-input {
+                font-size: 18px;
+                padding: 16px 20px;
+            }
+
+            .progress-value {
+                font-size: 24px;
+            }
+
+            .quiz-card {
+                padding: 32px 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // Comprehensive list of 196 countries and their capitals with regions
+        const COUNTRIES = [
+            { country: "Afghanistan", capital: "Kabul", region: "Asia" },
+            { country: "Albania", capital: "Tirana", region: "Europe" },
+            { country: "Algeria", capital: "Algiers", region: "Africa" },
+            { country: "Andorra", capital: "Andorra la Vella", region: "Europe" },
+            { country: "Angola", capital: "Luanda", region: "Africa" },
+            { country: "Antigua and Barbuda", capital: "Saint John's", region: "North and Central America" },
+            { country: "Argentina", capital: "Buenos Aires", region: "South America" },
+            { country: "Armenia", capital: "Yerevan", region: "Asia" },
+            { country: "Australia", capital: "Canberra", region: "Oceania" },
+            { country: "Austria", capital: "Vienna", region: "Europe" },
+            { country: "Azerbaijan", capital: "Baku", region: "Asia" },
+            { country: "Bahamas", capital: "Nassau", region: "North and Central America" },
+            { country: "Bahrain", capital: "Manama", region: "Asia" },
+            { country: "Bangladesh", capital: "Dhaka", region: "Asia" },
+            { country: "Barbados", capital: "Bridgetown", region: "North and Central America" },
+            { country: "Belarus", capital: "Minsk", region: "Europe" },
+            { country: "Belgium", capital: "Brussels", region: "Europe" },
+            { country: "Belize", capital: "Belmopan", region: "North and Central America" },
+            { country: "Benin", capital: "Porto-Novo", region: "Africa" },
+            { country: "Bhutan", capital: "Thimphu", region: "Asia" },
+            { country: "Bolivia", capital: "Sucre", region: "South America" },
+            { country: "Bosnia and Herzegovina", capital: "Sarajevo", region: "Europe" },
+            { country: "Botswana", capital: "Gaborone", region: "Africa" },
+            { country: "Brazil", capital: "Brasília", region: "South America" },
+            { country: "Brunei", capital: "Bandar Seri Begawan", region: "Asia" },
+            { country: "Bulgaria", capital: "Sofia", region: "Europe" },
+            { country: "Burkina Faso", capital: "Ouagadougou", region: "Africa" },
+            { country: "Burundi", capital: "Gitega", region: "Africa" },
+            { country: "Cabo Verde", capital: "Praia", region: "Africa" },
+            { country: "Cambodia", capital: "Phnom Penh", region: "Asia" },
+            { country: "Cameroon", capital: "Yaoundé", region: "Africa" },
+            { country: "Canada", capital: "Ottawa", region: "North and Central America" },
+            { country: "Central African Republic", capital: "Bangui", region: "Africa" },
+            { country: "Chad", capital: "N'Djamena", region: "Africa" },
+            { country: "Chile", capital: "Santiago", region: "South America" },
+            { country: "China", capital: "Beijing", region: "Asia" },
+            { country: "Colombia", capital: "Bogotá", region: "South America" },
+            { country: "Comoros", capital: "Moroni", region: "Africa" },
+            { country: "Congo (Congo-Brazzaville)", capital: "Brazzaville", region: "Africa" },
+            { country: "Costa Rica", capital: "San José", region: "North and Central America" },
+            { country: "Croatia", capital: "Zagreb", region: "Europe" },
+            { country: "Cuba", capital: "Havana", region: "North and Central America" },
+            { country: "Cyprus", capital: "Nicosia", region: "Asia" },
+            { country: "Czech Republic", capital: "Prague", region: "Europe" },
+            { country: "Denmark", capital: "Copenhagen", region: "Europe" },
+            { country: "Djibouti", capital: "Djibouti", region: "Africa" },
+            { country: "Dominica", capital: "Roseau", region: "North and Central America" },
+            { country: "Dominican Republic", capital: "Santo Domingo", region: "North and Central America" },
+            { country: "DR Congo", capital: "Kinshasa", region: "Africa" },
+            { country: "Ecuador", capital: "Quito", region: "South America" },
+            { country: "Egypt", capital: "Cairo", region: "Africa" },
+            { country: "El Salvador", capital: "San Salvador", region: "North and Central America" },
+            { country: "Equatorial Guinea", capital: "Malabo", region: "Africa" },
+            { country: "Eritrea", capital: "Asmara", region: "Africa" },
+            { country: "Estonia", capital: "Tallinn", region: "Europe" },
+            { country: "Eswatini", capital: "Mbabane", region: "Africa" },
+            { country: "Ethiopia", capital: "Addis Ababa", region: "Africa" },
+            { country: "Fiji", capital: "Suva", region: "Oceania" },
+            { country: "Finland", capital: "Helsinki", region: "Europe" },
+            { country: "France", capital: "Paris", region: "Europe" },
+            { country: "Gabon", capital: "Libreville", region: "Africa" },
+            { country: "Gambia", capital: "Banjul", region: "Africa" },
+            { country: "Georgia", capital: "Tbilisi", region: "Asia" },
+            { country: "Germany", capital: "Berlin", region: "Europe" },
+            { country: "Ghana", capital: "Accra", region: "Africa" },
+            { country: "Greece", capital: "Athens", region: "Europe" },
+            { country: "Grenada", capital: "Saint George's", region: "North and Central America" },
+            { country: "Guatemala", capital: "Guatemala City", region: "North and Central America" },
+            { country: "Guinea", capital: "Conakry", region: "Africa" },
+            { country: "Guinea-Bissau", capital: "Bissau", region: "Africa" },
+            { country: "Guyana", capital: "Georgetown", region: "South America" },
+            { country: "Haiti", capital: "Port-au-Prince", region: "North and Central America" },
+            { country: "Honduras", capital: "Tegucigalpa", region: "North and Central America" },
+            { country: "Hungary", capital: "Budapest", region: "Europe" },
+            { country: "Iceland", capital: "Reykjavik", region: "Europe" },
+            { country: "India", capital: "New Delhi", region: "Asia" },
+            { country: "Indonesia", capital: "Jakarta", region: "Asia" },
+            { country: "Iran", capital: "Tehran", region: "Asia" },
+            { country: "Iraq", capital: "Baghdad", region: "Asia" },
+            { country: "Ireland", capital: "Dublin", region: "Europe" },
+            { country: "Israel", capital: "Jerusalem", region: "Asia" },
+            { country: "Italy", capital: "Rome", region: "Europe" },
+            { country: "Ivory Coast", capital: "Yamoussoukro", region: "Africa" },
+            { country: "Jamaica", capital: "Kingston", region: "North and Central America" },
+            { country: "Japan", capital: "Tokyo", region: "Asia" },
+            { country: "Jordan", capital: "Amman", region: "Asia" },
+            { country: "Kazakhstan", capital: "Astana", region: "Asia" },
+            { country: "Kenya", capital: "Nairobi", region: "Africa" },
+            { country: "Kiribati", capital: "Tarawa", region: "Oceania" },
+            { country: "Kosovo", capital: "Pristina", region: "Europe" },
+            { country: "Kuwait", capital: "Kuwait City", region: "Asia" },
+            { country: "Kyrgyzstan", capital: "Bishkek", region: "Asia" },
+            { country: "Laos", capital: "Vientiane", region: "Asia" },
+            { country: "Latvia", capital: "Riga", region: "Europe" },
+            { country: "Lebanon", capital: "Beirut", region: "Asia" },
+            { country: "Lesotho", capital: "Maseru", region: "Africa" },
+            { country: "Liberia", capital: "Monrovia", region: "Africa" },
+            { country: "Libya", capital: "Tripoli", region: "Africa" },
+            { country: "Liechtenstein", capital: "Vaduz", region: "Europe" },
+            { country: "Lithuania", capital: "Vilnius", region: "Europe" },
+            { country: "Luxembourg", capital: "Luxembourg", region: "Europe" },
+            { country: "Madagascar", capital: "Antananarivo", region: "Africa" },
+            { country: "Malawi", capital: "Lilongwe", region: "Africa" },
+            { country: "Malaysia", capital: "Kuala Lumpur", region: "Asia" },
+            { country: "Maldives", capital: "Malé", region: "Asia" },
+            { country: "Mali", capital: "Bamako", region: "Africa" },
+            { country: "Malta", capital: "Valletta", region: "Europe" },
+            { country: "Marshall Islands", capital: "Majuro", region: "Oceania" },
+            { country: "Mauritania", capital: "Nouakchott", region: "Africa" },
+            { country: "Mauritius", capital: "Port Louis", region: "Africa" },
+            { country: "Mexico", capital: "Mexico City", region: "North and Central America" },
+            { country: "Micronesia", capital: "Palikir", region: "Oceania" },
+            { country: "Moldova", capital: "Chișinău", region: "Europe" },
+            { country: "Monaco", capital: "Monaco", region: "Europe" },
+            { country: "Mongolia", capital: "Ulaanbaatar", region: "Asia" },
+            { country: "Montenegro", capital: "Podgorica", region: "Europe" },
+            { country: "Morocco", capital: "Rabat", region: "Africa" },
+            { country: "Mozambique", capital: "Maputo", region: "Africa" },
+            { country: "Myanmar", capital: "Naypyidaw", region: "Asia" },
+            { country: "Namibia", capital: "Windhoek", region: "Africa" },
+            { country: "Nauru", capital: "Yaren", region: "Oceania" },
+            { country: "Nepal", capital: "Kathmandu", region: "Asia" },
+            { country: "Netherlands", capital: "Amsterdam", region: "Europe" },
+            { country: "New Zealand", capital: "Wellington", region: "Oceania" },
+            { country: "Nicaragua", capital: "Managua", region: "North and Central America" },
+            { country: "Niger", capital: "Niamey", region: "Africa" },
+            { country: "Nigeria", capital: "Abuja", region: "Africa" },
+            { country: "North Korea", capital: "Pyongyang", region: "Asia" },
+            { country: "North Macedonia", capital: "Skopje", region: "Europe" },
+            { country: "Norway", capital: "Oslo", region: "Europe" },
+            { country: "Oman", capital: "Muscat", region: "Asia" },
+            { country: "Pakistan", capital: "Islamabad", region: "Asia" },
+            { country: "Palau", capital: "Ngerulmud", region: "Oceania" },
+            { country: "Palestine", capital: "Ramallah", region: "Asia" },
+            { country: "Panama", capital: "Panama City", region: "North and Central America" },
+            { country: "Papua New Guinea", capital: "Port Moresby", region: "Oceania" },
+            { country: "Paraguay", capital: "Asunción", region: "South America" },
+            { country: "Peru", capital: "Lima", region: "South America" },
+            { country: "Philippines", capital: "Manila", region: "Asia" },
+            { country: "Poland", capital: "Warsaw", region: "Europe" },
+            { country: "Portugal", capital: "Lisbon", region: "Europe" },
+            { country: "Qatar", capital: "Doha", region: "Asia" },
+            { country: "Romania", capital: "Bucharest", region: "Europe" },
+            { country: "Russia", capital: "Moscow", region: "Europe" },
+            { country: "Rwanda", capital: "Kigali", region: "Africa" },
+            { country: "Saint Kitts and Nevis", capital: "Basseterre", region: "North and Central America" },
+            { country: "Saint Lucia", capital: "Castries", region: "North and Central America" },
+            { country: "Saint Vincent and the Grenadines", capital: "Kingstown", region: "North and Central America" },
+            { country: "Samoa", capital: "Apia", region: "Oceania" },
+            { country: "San Marino", capital: "San Marino", region: "Europe" },
+            { country: "Sao Tome and Principe", capital: "São Tomé", region: "Africa" },
+            { country: "Saudi Arabia", capital: "Riyadh", region: "Asia" },
+            { country: "Senegal", capital: "Dakar", region: "Africa" },
+            { country: "Serbia", capital: "Belgrade", region: "Europe" },
+            { country: "Seychelles", capital: "Victoria", region: "Africa" },
+            { country: "Sierra Leone", capital: "Freetown", region: "Africa" },
+            { country: "Singapore", capital: "Singapore", region: "Asia" },
+            { country: "Slovakia", capital: "Bratislava", region: "Europe" },
+            { country: "Slovenia", capital: "Ljubljana", region: "Europe" },
+            { country: "Solomon Islands", capital: "Honiara", region: "Oceania" },
+            { country: "Somalia", capital: "Mogadishu", region: "Africa" },
+            { country: "South Africa", capital: "Pretoria", region: "Africa" },
+            { country: "South Korea", capital: "Seoul", region: "Asia" },
+            { country: "South Sudan", capital: "Juba", region: "Africa" },
+            { country: "Spain", capital: "Madrid", region: "Europe" },
+            { country: "Sri Lanka", capital: "Sri Jayawardenepura Kotte", region: "Asia" },
+            { country: "Sudan", capital: "Khartoum", region: "Africa" },
+            { country: "Suriname", capital: "Paramaribo", region: "South America" },
+            { country: "Sweden", capital: "Stockholm", region: "Europe" },
+            { country: "Switzerland", capital: "Bern", region: "Europe" },
+            { country: "Syria", capital: "Damascus", region: "Asia" },
+            { country: "Tajikistan", capital: "Dushanbe", region: "Asia" },
+            { country: "Tanzania", capital: "Dodoma", region: "Africa" },
+            { country: "Thailand", capital: "Bangkok", region: "Asia" },
+            { country: "Timor-Leste", capital: "Dili", region: "Asia" },
+            { country: "Togo", capital: "Lomé", region: "Africa" },
+            { country: "Tonga", capital: "Nuku'alofa", region: "Oceania" },
+            { country: "Trinidad and Tobago", capital: "Port of Spain", region: "North and Central America" },
+            { country: "Tunisia", capital: "Tunis", region: "Africa" },
+            { country: "Turkey", capital: "Ankara", region: "Asia" },
+            { country: "Turkmenistan", capital: "Ashgabat", region: "Asia" },
+            { country: "Tuvalu", capital: "Funafuti", region: "Oceania" },
+            { country: "Uganda", capital: "Kampala", region: "Africa" },
+            { country: "Ukraine", capital: "Kyiv", region: "Europe" },
+            { country: "United Arab Emirates", capital: "Abu Dhabi", region: "Asia" },
+            { country: "United Kingdom", capital: "London", region: "Europe" },
+            { country: "United States", capital: "Washington, D.C.", region: "North and Central America" },
+            { country: "Uruguay", capital: "Montevideo", region: "South America" },
+            { country: "Uzbekistan", capital: "Tashkent", region: "Asia" },
+            { country: "Vanuatu", capital: "Port Vila", region: "Oceania" },
+            { country: "Vatican City", capital: "Vatican City", region: "Europe" },
+            { country: "Venezuela", capital: "Caracas", region: "South America" },
+            { country: "Vietnam", capital: "Hanoi", region: "Asia" },
+            { country: "Yemen", capital: "Sana'a", region: "Asia" },
+            { country: "Zambia", capital: "Lusaka", region: "Africa" },
+            { country: "Zimbabwe", capital: "Harare", region: "Africa" }
+        ];
+
+        // Fuzzy matching function for capital names
+        // Common alternative spellings and phonetic variations for capitals
+        const CAPITAL_ALTERNATIVES = {
+            "Kyiv": ["Kiev"],
+            "Beijing": ["Peking"],
+            "Mumbai": ["Bombay"],
+            "Kolkata": ["Calcutta"],
+            "Chennai": ["Madras"],
+            "Dhaka": ["Dacca"],
+            "Yangon": ["Rangoon"],
+            "Ho Chi Minh City": ["Saigon"],
+            "Tehran": ["Teheran"],
+            "Riyadh": ["Riyad", "Riad"],
+            "Astana": ["Nur-Sultan", "Nursultan"],
+            "N'Djamena": ["Ndjamena", "Fort-Lamy"],
+            "Ouagadougou": ["Wagadugu"],
+            "Yamoussoukro": ["Yamassoukro"],
+            "Antananarivo": ["Tananarive"],
+            "Mbabane": ["Lobamba"],
+            "Pretoria": ["Cape Town", "Capetown", "Bloemfontein"],
+            "Sri Jayawardenepura Kotte": ["Colombo"],
+            "La Paz": ["Sucre"],
+            "The Hague": ["Amsterdam"],
+            "Reykjavik": ["Reykjavík", "Rejkjavik"],
+            "Brasília": ["Brasilia"],
+            "Bogotá": ["Bogota"],
+            "São Tomé": ["Sao Tome"],
+            "Chișinău": ["Chisinau", "Kishinev"],
+            "Copenhagen": ["København", "Kobenhavn"],
+            "Prague": ["Praha"],
+            "Sarajevo": ["Sarejevo"],
+            "Tirana": ["Tirane"],
+            "Vienna": ["Wien"],
+            "Rome": ["Roma"],
+            "Athens": ["Athina"],
+            "Bucharest": ["București", "Bucuresti"],
+            "Warsaw": ["Warszawa"],
+            "Nicosia": ["Lefkosia"],
+            "Valletta": ["La Valetta"],
+            "Lisbon": ["Lisboa"],
+            "Brussels": ["Bruxelles", "Brussel"],
+            "Luxembourg": ["Lëtzebuerg"],
+            "The Hague": ["Den Haag", "s-Gravenhage"],
+            "Ulaanbaatar": ["Ulan Bator", "Ulanbator"],
+            "Pyongyang": ["P'yongyang"],
+            "Seoul": ["Sŏul"],
+            "Tokyo": ["Tōkyō", "Tokio"],
+            "Nuku'alofa": ["Nukualofa"],
+            "Port-au-Prince": ["Port au Prince"],
+            "Santo Domingo": ["Ciudad Trujillo"],
+            "Sana'a": ["Sanaa"],
+            "Malabo": ["Ciudad de la Paz", "Ciudad de La Paz"],
+        };
+
+        function normalizeString(str) {
+            return str
+                .toLowerCase()
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "") // Remove accents
+                // Handle Saint/St abbreviations
+                .replace(/\bst\b\.?\s*/g, 'saint')  // "st johns" or "st. johns" → "saint johns"
+                .replace(/\bsaint\b\.?\s*/g, 'saint') // normalize "saint" spacing
+                // Remove "city" suffix to allow matching without it
+                .replace(/\s*city\s*$/i, '') // "panama city" → "panama", "kuwait city" → "kuwait"
+                .replace(/[^a-z0-9\s]/g, "") // Remove special characters
+                .replace(/\s+/g, '') // Remove all spaces for consistent matching
+                .trim();
+        }
+
+        function levenshteinDistance(str1, str2) {
+            const len1 = str1.length;
+            const len2 = str2.length;
+            const dp = Array(len1 + 1).fill(null).map(() => Array(len2 + 1).fill(0));
+
+            for (let i = 0; i <= len1; i++) dp[i][0] = i;
+            for (let j = 0; j <= len2; j++) dp[0][j] = j;
+
+            for (let i = 1; i <= len1; i++) {
+                for (let j = 1; j <= len2; j++) {
+                    if (str1[i - 1] === str2[j - 1]) {
+                        dp[i][j] = dp[i - 1][j - 1];
+                    } else {
+                        dp[i][j] = Math.min(
+                            dp[i - 1][j] + 1,    // deletion
+                            dp[i][j - 1] + 1,    // insertion
+                            dp[i - 1][j - 1] + 1 // substitution
+                        );
+                    }
+                }
+            }
+
+            return dp[len1][len2];
+        }
+
+        // Phonetic normalization - converts words to sound-alike patterns
+        function getPhoneticPattern(str) {
+            let phonetic = normalizeString(str);
+            
+            // Common phonetic replacements
+            phonetic = phonetic.replace(/ph/g, 'f');      // "phnom" → "fnom"
+            phonetic = phonetic.replace(/gh/g, 'g');      // "baghdad" → "bagdad"
+            phonetic = phonetic.replace(/kh/g, 'k');      // "khartoum" → "kartoum"
+            phonetic = phonetic.replace(/ck/g, 'k');      // 
+            phonetic = phonetic.replace(/qu/g, 'kw');     // "quito" → "kwito"
+            phonetic = phonetic.replace(/x/g, 'ks');      // 
+            phonetic = phonetic.replace(/c([eiy])/g, 's$1'); // "nicosia" → "nisosia"
+            phonetic = phonetic.replace(/c([aou])/g, 'k$1'); // "cairo" → "kairo"
+            phonetic = phonetic.replace(/th/g, 't');      // "athens" → "atens"
+            
+            // Handle silent letters and common variations
+            phonetic = phonetic.replace(/^h/, '');        // silent h at start
+            phonetic = phonetic.replace(/ght/g, 't');     // "night" → "nit"
+            
+            // Vowel normalization for similar sounds
+            phonetic = phonetic.replace(/[aeo]+/g, 'a');  // "penh" → "panh", but also "peng" → "pang"
+            phonetic = phonetic.replace(/[iy]+/g, 'i');   // 
+            phonetic = phonetic.replace(/[uw]+/g, 'u');   // 
+            
+            return phonetic;
+        }
+
+        // Extract consonant skeleton for phonetic comparison
+        function getConsonantPattern(str) {
+            const normalized = normalizeString(str);
+            // Keep consonants and their order, remove vowels
+            return normalized.replace(/[aeiou]/g, '');
+        }
+
+        function isCorrectCapital(userInput, correctCapital) {
+            const normalized1 = normalizeString(userInput);
+            const normalized2 = normalizeString(correctCapital);
+
+            // Check if user typed an accepted alternative spelling
+            if (CAPITAL_ALTERNATIVES[correctCapital]) {
+                for (const alt of CAPITAL_ALTERNATIVES[correctCapital]) {
+                    const normalizedAlt = normalizeString(alt);
+                    
+                    // Exact match with alternative
+                    if (normalized1 === normalizedAlt) {
+                        return true;
+                    }
+                    
+                    // Apply same fuzzy/phonetic matching to alternatives
+                    if (normalized1.length >= normalizedAlt.length) {
+                        const altDistance = levenshteinDistance(normalized1, normalizedAlt);
+                        const altMaxDistance = normalizedAlt.length >= 8 ? 2 : 1;
+                        
+                        if (altDistance <= altMaxDistance) {
+                            // Check consonant patterns too
+                            const consonants1 = getConsonantPattern(normalized1);
+                            const consonantsAlt = getConsonantPattern(normalizedAlt);
+                            const consonantDistance = levenshteinDistance(consonants1, consonantsAlt);
+                            
+                            if (consonantDistance <= 1) {
+                                return true;
+                            }
+                        }
+                        
+                        // Try phonetic matching with alternative
+                        const phonetic1 = getPhoneticPattern(normalized1);
+                        const phoneticAlt = getPhoneticPattern(normalizedAlt);
+                        const phoneticDistance = levenshteinDistance(phonetic1, phoneticAlt);
+                        const phoneticMaxDistance = phoneticAlt.length >= 8 ? 2 : 1;
+                        
+                        if (phoneticDistance <= phoneticMaxDistance) {
+                            const consonants1 = getConsonantPattern(phonetic1);
+                            const consonantsAlt = getConsonantPattern(phoneticAlt);
+                            const consonantDistance = levenshteinDistance(consonants1, consonantsAlt);
+                            
+                            if (consonantDistance <= 1) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // CRITICAL: Must type the FULL length before we even check
+            // This prevents "porto nov" from matching "porto novo"
+            if (normalized1.length < normalized2.length) return false;
+
+            // Exact match
+            if (normalized1 === normalized2) return true;
+
+            // Require at least 4 characters minimum
+            if (normalized1.length < 4) return false;
+
+            // Allow up to 2 character differences for words 8+ chars, 1 for shorter
+            // But ONLY if the length is correct (or 1 character longer due to typo)
+            if (normalized1.length > normalized2.length + 1) return false;
+            
+            const maxDistance = normalized2.length >= 8 ? 2 : 1;
+            const distance = levenshteinDistance(normalized1, normalized2);
+
+            if (distance > maxDistance) {
+                // If standard fuzzy matching fails, try phonetic matching
+                // This handles cases like "fenom pang" vs "phnom penh"
+                const phonetic1 = getPhoneticPattern(normalized1);
+                const phonetic2 = getPhoneticPattern(normalized2);
+                
+                const phoneticDistance = levenshteinDistance(phonetic1, phonetic2);
+                const phoneticMaxDistance = phonetic2.length >= 8 ? 2 : 1;
+                
+                if (phoneticDistance > phoneticMaxDistance) return false;
+                
+                // Also check consonants for phonetic match
+                const consonants1 = getConsonantPattern(phonetic1);
+                const consonants2 = getConsonantPattern(phonetic2);
+                const consonantDistance = levenshteinDistance(consonants1, consonants2);
+                
+                if (consonantDistance > 1) return false;
+                
+                return true;
+            }
+
+            // PHONETIC CHECK: Consonant patterns must match closely
+            // This prevents "bishkee" from matching "bishkek"
+            const consonants1 = getConsonantPattern(normalized1);
+            const consonants2 = getConsonantPattern(normalized2);
+            
+            // Consonants must match exactly or with only 1 difference
+            const consonantDistance = levenshteinDistance(consonants1, consonants2);
+            
+            // If consonant patterns differ by more than 1, reject (not phonetically similar)
+            if (consonantDistance > 1) return false;
+
+            return true;
+        }
+
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        function WorldQuizApp() {
+            const [shuffledCountries, setShuffledCountries] = useState([]);
+            const [currentIndex, setCurrentIndex] = useState(0);
+            const [userInput, setUserInput] = useState("");
+            const [feedback, setFeedback] = useState("");
+            const [feedbackType, setFeedbackType] = useState("");
+            const [cardState, setCardState] = useState("");
+            const [hasStarted, setHasStarted] = useState(false);
+            const [skippedCount, setSkippedCount] = useState(0);
+            const [skippedIndices, setSkippedIndices] = useState([]);
+            const [completedCount, setCompletedCount] = useState(0);
+            const [selectedRegions, setSelectedRegions] = useState([]);
+            const [isReviewingSkipped, setIsReviewingSkipped] = useState(false);
+            const inputRef = useRef(null);
+            const isProcessing = useRef(false);
+
+            const REGIONS = [
+                "North and Central America",
+                "South America",
+                "Europe",
+                "Africa",
+                "Asia",
+                "Oceania"
+            ];
+
+            useEffect(() => {
+                // Don't pre-shuffle - wait for region selection
+            }, []);
+
+            useEffect(() => {
+                if (inputRef.current && currentIndex < shuffledCountries.length && hasStarted) {
+                    inputRef.current.focus();
+                }
+
+                // Check if we've finished the first pass and have skipped countries
+                if (currentIndex >= shuffledCountries.length && skippedIndices.length > 0 && !isReviewingSkipped && hasStarted) {
+                    // Start reviewing skipped countries
+                    setIsReviewingSkipped(true);
+                    setCurrentIndex(skippedIndices[0]);
+                    setSkippedIndices(prev => prev.slice(1));
+                }
+            }, [currentIndex, hasStarted, skippedIndices, isReviewingSkipped, shuffledCountries.length]);
+
+            const getFilteredCountries = () => {
+                if (selectedRegions.length === 0) {
+                    return COUNTRIES; // All countries
+                }
+                return COUNTRIES.filter(country => selectedRegions.includes(country.region));
+            };
+
+            const startGame = () => {
+                const filtered = getFilteredCountries();
+                setShuffledCountries(shuffleArray(filtered));
+                setHasStarted(true);
+                setCurrentIndex(0);
+                setUserInput("");
+                setFeedback("");
+                setFeedbackType("");
+                setCardState("");
+                setSkippedCount(0);
+                setSkippedIndices([]);
+                setCompletedCount(0);
+                setIsReviewingSkipped(false);
+                isProcessing.current = false;
+            };
+
+            const restartGame = () => {
+                const filtered = getFilteredCountries();
+                setShuffledCountries(shuffleArray(filtered));
+                setCurrentIndex(0);
+                setUserInput("");
+                setFeedback("");
+                setFeedbackType("");
+                setCardState("");
+                setHasStarted(true);
+                setSkippedCount(0);
+                setSkippedIndices([]);
+                setCompletedCount(0);
+                setIsReviewingSkipped(false);
+                isProcessing.current = false;
+            };
+
+            const giveUp = () => {
+                // Mark as complete to show score screen
+                setCurrentIndex(shuffledCountries.length);
+            };
+
+            const returnToHome = () => {
+                // Reset everything and go back to start screen
+                setHasStarted(false);
+                setShuffledCountries([]);
+                setCurrentIndex(0);
+                setUserInput("");
+                setFeedback("");
+                setFeedbackType("");
+                setCardState("");
+                setSkippedCount(0);
+                setSkippedIndices([]);
+                setCompletedCount(0);
+                setIsReviewingSkipped(false);
+                setSelectedRegions([]);
+                isProcessing.current = false;
+            };
+
+            const toggleRegion = (region) => {
+                setSelectedRegions(prev => {
+                    if (prev.includes(region)) {
+                        return prev.filter(r => r !== region);
+                    } else {
+                        return [...prev, region];
+                    }
+                });
+            };
+
+            const selectAllRegions = () => {
+                setSelectedRegions([]);
+            };
+
+            const handleSkip = () => {
+                if (isProcessing.current) return;
+                
+                isProcessing.current = true;
+                
+                if (isReviewingSkipped) {
+                    // During review, just move to next skipped item without re-adding
+                    if (skippedIndices.length > 0) {
+                        setCurrentIndex(skippedIndices[0]);
+                        setSkippedIndices(prev => prev.slice(1));
+                    } else {
+                        // No more skipped items, end the game
+                        setCurrentIndex(shuffledCountries.length);
+                    }
+                    isProcessing.current = false;
+                } else {
+                    // During first pass, add to skipped list
+                    setSkippedCount(prev => prev + 1);
+                    setSkippedIndices(prev => [...prev, currentIndex]);
+                    setFeedback("Skipped");
+                    setFeedbackType("incorrect");
+                    setCardState("incorrect");
+
+                    setTimeout(() => {
+                        setCurrentIndex(prev => prev + 1);
+                        setUserInput("");
+                        setFeedback("");
+                        setFeedbackType("");
+                        setCardState("");
+                        isProcessing.current = false;
+                    }, 400);
+                }
+            };
+
+            const handleInputChange = (e) => {
+                if (isProcessing.current) return;
+
+                const value = e.target.value;
+                setUserInput(value);
+                setFeedback("");
+                setFeedbackType("");
+                setCardState("");
+
+                if (value.trim() === "") return;
+
+                const currentCountry = shuffledCountries[currentIndex];
+                if (isCorrectCapital(value, currentCountry.capital)) {
+                    isProcessing.current = true;
+                    setCompletedCount(prev => prev + 1);
+                    setFeedback("Correct!");
+                    setFeedbackType("correct");
+                    setCardState("correct");
+
+                    setTimeout(() => {
+                        if (isReviewingSkipped) {
+                            // Move to next skipped item
+                            if (skippedIndices.length > 0) {
+                                setCurrentIndex(skippedIndices[0]);
+                                setSkippedIndices(prev => prev.slice(1));
+                            } else {
+                                // No more skipped items, end game
+                                setCurrentIndex(shuffledCountries.length);
+                            }
+                        } else {
+                            // Normal progression
+                            setCurrentIndex(prev => prev + 1);
+                        }
+                        setUserInput("");
+                        setFeedback("");
+                        setFeedbackType("");
+                        setCardState("");
+                        isProcessing.current = false;
+                    }, 600);
+                }
+            };
+
+            if (!hasStarted) {
+                const filteredCount = getFilteredCountries().length;
+                const isAllRegions = selectedRegions.length === 0;
+
+                return (
+                    <div className="app-container">
+                        <div className="header">
+                            <div className="logo">WorldQuiz</div>
+                            <div className="subtitle">Capital Cities Challenge</div>
+                        </div>
+
+                        <div className="quiz-card">
+                            <div className="completion-icon">🌍</div>
+                            <div className="completion-title">Ready to Test Your Geography?</div>
+                            <div className="completion-message">
+                                Name the capitals of countries around the world!
+                            </div>
+
+                            <div className="region-filter">
+                                <div className="filter-title">Select Regions</div>
+                                
+                                <button 
+                                    className={`all-regions-button ${isAllRegions ? 'active' : ''}`}
+                                    onClick={selectAllRegions}
+                                >
+                                    All Regions (196 Countries)
+                                </button>
+
+                                <div className="region-buttons">
+                                    {REGIONS.map(region => (
+                                        <button
+                                            key={region}
+                                            className={`region-button ${selectedRegions.includes(region) ? 'selected' : ''}`}
+                                            onClick={() => toggleRegion(region)}
+                                        >
+                                            {region}
+                                        </button>
+                                    ))}
+                                </div>
+
+                                <div className="region-count">
+                                    Selected: <span className="count">{filteredCount}</span> {filteredCount === 1 ? 'country' : 'countries'}
+                                </div>
+                            </div>
+
+                            <button 
+                                className="restart-button" 
+                                onClick={startGame}
+                                disabled={filteredCount === 0}
+                                style={{ opacity: filteredCount === 0 ? 0.5 : 1, cursor: filteredCount === 0 ? 'not-allowed' : 'pointer' }}
+                            >
+                                Start Game
+                            </button>
+                        </div>
+                    </div>
+                );
+            }
+
+            const isComplete = currentIndex >= shuffledCountries.length;
+            const currentCountry = !isComplete ? shuffledCountries[currentIndex] : null;
+            const remaining = shuffledCountries.length - currentIndex;
+            const totalCountries = shuffledCountries.length;
+
+            return (
+                <div className="app-container">
+                    <div className="header">
+                        <div className="logo">WorldQuiz</div>
+                        <div className="subtitle">Capital Cities Challenge</div>
+                    </div>
+
+                    {!isComplete ? (
+                        <>
+                            <div className="progress-bar">
+                                <div className="progress-stat">
+                                    <div className="progress-label">Current</div>
+                                    <div className="progress-value accent">{currentIndex + 1}</div>
+                                </div>
+                                <div className="divider"></div>
+                                <div className="progress-stat">
+                                    <div className="progress-label">Remaining</div>
+                                    <div className="progress-value">{remaining}</div>
+                                </div>
+                                <div className="divider"></div>
+                                <div className="progress-stat">
+                                    <div className="progress-label">Skipped</div>
+                                    <div className="progress-value">{skippedCount}</div>
+                                </div>
+                            </div>
+
+                            <div className={`quiz-card ${cardState}`}>
+                                <div className="country-name">{currentCountry.country}</div>
+                                <div className="input-wrapper">
+                                    <input
+                                        ref={inputRef}
+                                        type="text"
+                                        className={`capital-input ${feedbackType}`}
+                                        value={userInput}
+                                        onChange={handleInputChange}
+                                        placeholder="Type the capital city..."
+                                        autoComplete="off"
+                                        autoCorrect="off"
+                                        spellCheck="false"
+                                    />
+                                </div>
+                                <div className={`feedback ${feedbackType}`}>{feedback}</div>
+                            </div>
+
+                            <div style={{ display: 'flex', gap: '12px', marginBottom: '12px' }}>
+                                <button 
+                                    className="restart-button" 
+                                    style={{ 
+                                        flex: 1, 
+                                        background: 'var(--bg-secondary)', 
+                                        border: '2px solid var(--accent-secondary)',
+                                        color: 'var(--accent-secondary)'
+                                    }}
+                                    onClick={handleSkip}
+                                >
+                                    Skip
+                                </button>
+                                <button 
+                                    className="restart-button" 
+                                    style={{ 
+                                        flex: 1, 
+                                        background: 'rgba(255, 68, 102, 0.1)', 
+                                        border: '2px solid var(--error)',
+                                        color: 'var(--error)'
+                                    }}
+                                    onClick={giveUp}
+                                >
+                                    Give Up
+                                </button>
+                                <button 
+                                    className="restart-button" 
+                                    style={{ flex: 1 }}
+                                    onClick={restartGame}
+                                >
+                                    Restart
+                                </button>
+                            </div>
+
+                            <button 
+                                className="restart-button" 
+                                style={{ 
+                                    background: 'var(--bg-secondary)', 
+                                    border: '2px solid var(--border)',
+                                    color: 'var(--text-primary)'
+                                }}
+                                onClick={returnToHome}
+                            >
+                                ← Back to Home
+                            </button>
+                        </>
+                    ) : (
+                        <div className="completion-screen">
+                            <div className="quiz-card">
+                                <div className="completion-icon">🌍</div>
+                                <div className="completion-title">
+                                    {completedCount === totalCountries ? "Perfect Score!" : "Game Complete!"}
+                                </div>
+                                <div className="completion-message">
+                                    Score: <strong>{completedCount} / {totalCountries}</strong><br/>
+                                    Correct: {completedCount} | Skipped: {skippedCount}
+                                    {completedCount === totalCountries && (
+                                        <>
+                                            <br/><br/>
+                                            <span style={{ color: 'var(--accent-primary)', fontWeight: 600 }}>
+                                                🏆 You are an expert in {selectedRegions.length === 0 || selectedRegions.length === 6 
+                                                    ? "World Geography" 
+                                                    : selectedRegions.length === 1 
+                                                        ? selectedRegions[0]
+                                                        : "these regions"}!
+                                            </span>
+                                        </>
+                                    )}
+                                </div>
+                                <div style={{ display: 'flex', gap: '12px' }}>
+                                    <button 
+                                        className="restart-button" 
+                                        style={{ flex: 1 }}
+                                        onClick={restartGame}
+                                    >
+                                        Play Again
+                                    </button>
+                                    <button 
+                                        className="restart-button" 
+                                        style={{ 
+                                            flex: 1,
+                                            background: 'var(--bg-secondary)', 
+                                            border: '2px solid var(--border)',
+                                            color: 'var(--text-primary)'
+                                        }}
+                                        onClick={returnToHome}
+                                    >
+                                        ← Home
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<WorldQuizApp />);
+    </script>
+</body>
+</html>
