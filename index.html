@@ -399,6 +399,19 @@
             font-weight: 600;
         }
 
+        .fun-fact {
+            font-size: 14px;
+            color: var(--text-secondary);
+            text-align: center;
+            font-style: italic;
+            line-height: 1.6;
+            margin-top: 20px;
+            padding: 16px 20px;
+            background: rgba(123, 104, 238, 0.1);
+            border-radius: 8px;
+            border-left: 3px solid var(--accent-secondary);
+        }
+
         .completion-screen {
             text-align: center;
             animation: fadeIn 0.6s ease;
@@ -465,204 +478,204 @@
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
 
-        // Comprehensive list of 196 countries and their capitals with regions
+        // Comprehensive list of 196 countries and their capitals with regions and fun facts
         const COUNTRIES = [
-            { country: "Afghanistan", capital: "Kabul", region: "Asia" },
-            { country: "Albania", capital: "Tirana", region: "Europe" },
-            { country: "Algeria", capital: "Algiers", region: "Africa" },
-            { country: "Andorra", capital: "Andorra la Vella", region: "Europe" },
-            { country: "Angola", capital: "Luanda", region: "Africa" },
-            { country: "Antigua and Barbuda", capital: "Saint John's", region: "North and Central America" },
-            { country: "Argentina", capital: "Buenos Aires", region: "South America" },
-            { country: "Armenia", capital: "Yerevan", region: "Asia" },
-            { country: "Australia", capital: "Canberra", region: "Oceania" },
-            { country: "Austria", capital: "Vienna", region: "Europe" },
-            { country: "Azerbaijan", capital: "Baku", region: "Asia" },
-            { country: "Bahamas", capital: "Nassau", region: "North and Central America" },
-            { country: "Bahrain", capital: "Manama", region: "Asia" },
-            { country: "Bangladesh", capital: "Dhaka", region: "Asia" },
-            { country: "Barbados", capital: "Bridgetown", region: "North and Central America" },
-            { country: "Belarus", capital: "Minsk", region: "Europe" },
-            { country: "Belgium", capital: "Brussels", region: "Europe" },
-            { country: "Belize", capital: "Belmopan", region: "North and Central America" },
-            { country: "Benin", capital: "Porto-Novo", region: "Africa" },
-            { country: "Bhutan", capital: "Thimphu", region: "Asia" },
-            { country: "Bolivia", capital: "Sucre", region: "South America" },
-            { country: "Bosnia and Herzegovina", capital: "Sarajevo", region: "Europe" },
-            { country: "Botswana", capital: "Gaborone", region: "Africa" },
-            { country: "Brazil", capital: "Brasília", region: "South America" },
-            { country: "Brunei", capital: "Bandar Seri Begawan", region: "Asia" },
-            { country: "Bulgaria", capital: "Sofia", region: "Europe" },
-            { country: "Burkina Faso", capital: "Ouagadougou", region: "Africa" },
-            { country: "Burundi", capital: "Gitega", region: "Africa" },
-            { country: "Cabo Verde", capital: "Praia", region: "Africa" },
-            { country: "Cambodia", capital: "Phnom Penh", region: "Asia" },
-            { country: "Cameroon", capital: "Yaoundé", region: "Africa" },
-            { country: "Canada", capital: "Ottawa", region: "North and Central America" },
-            { country: "Central African Republic", capital: "Bangui", region: "Africa" },
-            { country: "Chad", capital: "N'Djamena", region: "Africa" },
-            { country: "Chile", capital: "Santiago", region: "South America" },
-            { country: "China", capital: "Beijing", region: "Asia" },
-            { country: "Colombia", capital: "Bogotá", region: "South America" },
-            { country: "Comoros", capital: "Moroni", region: "Africa" },
-            { country: "Congo (Congo-Brazzaville)", capital: "Brazzaville", region: "Africa" },
-            { country: "Costa Rica", capital: "San José", region: "North and Central America" },
-            { country: "Croatia", capital: "Zagreb", region: "Europe" },
-            { country: "Cuba", capital: "Havana", region: "North and Central America" },
-            { country: "Cyprus", capital: "Nicosia", region: "Asia" },
-            { country: "Czech Republic", capital: "Prague", region: "Europe" },
-            { country: "Denmark", capital: "Copenhagen", region: "Europe" },
-            { country: "Djibouti", capital: "Djibouti", region: "Africa" },
-            { country: "Dominica", capital: "Roseau", region: "North and Central America" },
-            { country: "Dominican Republic", capital: "Santo Domingo", region: "North and Central America" },
-            { country: "DR Congo", capital: "Kinshasa", region: "Africa" },
-            { country: "Ecuador", capital: "Quito", region: "South America" },
-            { country: "Egypt", capital: "Cairo", region: "Africa" },
-            { country: "El Salvador", capital: "San Salvador", region: "North and Central America" },
-            { country: "Equatorial Guinea", capital: "Malabo", region: "Africa" },
-            { country: "Eritrea", capital: "Asmara", region: "Africa" },
-            { country: "Estonia", capital: "Tallinn", region: "Europe" },
-            { country: "Eswatini", capital: "Mbabane", region: "Africa" },
-            { country: "Ethiopia", capital: "Addis Ababa", region: "Africa" },
-            { country: "Fiji", capital: "Suva", region: "Oceania" },
-            { country: "Finland", capital: "Helsinki", region: "Europe" },
-            { country: "France", capital: "Paris", region: "Europe" },
-            { country: "Gabon", capital: "Libreville", region: "Africa" },
-            { country: "Gambia", capital: "Banjul", region: "Africa" },
-            { country: "Georgia", capital: "Tbilisi", region: "Asia" },
-            { country: "Germany", capital: "Berlin", region: "Europe" },
-            { country: "Ghana", capital: "Accra", region: "Africa" },
-            { country: "Greece", capital: "Athens", region: "Europe" },
-            { country: "Grenada", capital: "Saint George's", region: "North and Central America" },
-            { country: "Guatemala", capital: "Guatemala City", region: "North and Central America" },
-            { country: "Guinea", capital: "Conakry", region: "Africa" },
-            { country: "Guinea-Bissau", capital: "Bissau", region: "Africa" },
-            { country: "Guyana", capital: "Georgetown", region: "South America" },
-            { country: "Haiti", capital: "Port-au-Prince", region: "North and Central America" },
-            { country: "Honduras", capital: "Tegucigalpa", region: "North and Central America" },
-            { country: "Hungary", capital: "Budapest", region: "Europe" },
-            { country: "Iceland", capital: "Reykjavik", region: "Europe" },
-            { country: "India", capital: "New Delhi", region: "Asia" },
-            { country: "Indonesia", capital: "Jakarta", region: "Asia" },
-            { country: "Iran", capital: "Tehran", region: "Asia" },
-            { country: "Iraq", capital: "Baghdad", region: "Asia" },
-            { country: "Ireland", capital: "Dublin", region: "Europe" },
-            { country: "Israel", capital: "Jerusalem", region: "Asia" },
-            { country: "Italy", capital: "Rome", region: "Europe" },
-            { country: "Ivory Coast", capital: "Yamoussoukro", region: "Africa" },
-            { country: "Jamaica", capital: "Kingston", region: "North and Central America" },
-            { country: "Japan", capital: "Tokyo", region: "Asia" },
-            { country: "Jordan", capital: "Amman", region: "Asia" },
-            { country: "Kazakhstan", capital: "Astana", region: "Asia" },
-            { country: "Kenya", capital: "Nairobi", region: "Africa" },
-            { country: "Kiribati", capital: "Tarawa", region: "Oceania" },
-            { country: "Kosovo", capital: "Pristina", region: "Europe" },
-            { country: "Kuwait", capital: "Kuwait City", region: "Asia" },
-            { country: "Kyrgyzstan", capital: "Bishkek", region: "Asia" },
-            { country: "Laos", capital: "Vientiane", region: "Asia" },
-            { country: "Latvia", capital: "Riga", region: "Europe" },
-            { country: "Lebanon", capital: "Beirut", region: "Asia" },
-            { country: "Lesotho", capital: "Maseru", region: "Africa" },
-            { country: "Liberia", capital: "Monrovia", region: "Africa" },
-            { country: "Libya", capital: "Tripoli", region: "Africa" },
-            { country: "Liechtenstein", capital: "Vaduz", region: "Europe" },
-            { country: "Lithuania", capital: "Vilnius", region: "Europe" },
-            { country: "Luxembourg", capital: "Luxembourg", region: "Europe" },
-            { country: "Madagascar", capital: "Antananarivo", region: "Africa" },
-            { country: "Malawi", capital: "Lilongwe", region: "Africa" },
-            { country: "Malaysia", capital: "Kuala Lumpur", region: "Asia" },
-            { country: "Maldives", capital: "Malé", region: "Asia" },
-            { country: "Mali", capital: "Bamako", region: "Africa" },
-            { country: "Malta", capital: "Valletta", region: "Europe" },
-            { country: "Marshall Islands", capital: "Majuro", region: "Oceania" },
-            { country: "Mauritania", capital: "Nouakchott", region: "Africa" },
-            { country: "Mauritius", capital: "Port Louis", region: "Africa" },
-            { country: "Mexico", capital: "Mexico City", region: "North and Central America" },
-            { country: "Micronesia", capital: "Palikir", region: "Oceania" },
-            { country: "Moldova", capital: "Chișinău", region: "Europe" },
-            { country: "Monaco", capital: "Monaco", region: "Europe" },
-            { country: "Mongolia", capital: "Ulaanbaatar", region: "Asia" },
-            { country: "Montenegro", capital: "Podgorica", region: "Europe" },
-            { country: "Morocco", capital: "Rabat", region: "Africa" },
-            { country: "Mozambique", capital: "Maputo", region: "Africa" },
-            { country: "Myanmar", capital: "Naypyidaw", region: "Asia" },
-            { country: "Namibia", capital: "Windhoek", region: "Africa" },
-            { country: "Nauru", capital: "Yaren", region: "Oceania" },
-            { country: "Nepal", capital: "Kathmandu", region: "Asia" },
-            { country: "Netherlands", capital: "Amsterdam", region: "Europe" },
-            { country: "New Zealand", capital: "Wellington", region: "Oceania" },
-            { country: "Nicaragua", capital: "Managua", region: "North and Central America" },
-            { country: "Niger", capital: "Niamey", region: "Africa" },
-            { country: "Nigeria", capital: "Abuja", region: "Africa" },
-            { country: "North Korea", capital: "Pyongyang", region: "Asia" },
-            { country: "North Macedonia", capital: "Skopje", region: "Europe" },
-            { country: "Norway", capital: "Oslo", region: "Europe" },
-            { country: "Oman", capital: "Muscat", region: "Asia" },
-            { country: "Pakistan", capital: "Islamabad", region: "Asia" },
-            { country: "Palau", capital: "Ngerulmud", region: "Oceania" },
-            { country: "Palestine", capital: "Ramallah", region: "Asia" },
-            { country: "Panama", capital: "Panama City", region: "North and Central America" },
-            { country: "Papua New Guinea", capital: "Port Moresby", region: "Oceania" },
-            { country: "Paraguay", capital: "Asunción", region: "South America" },
-            { country: "Peru", capital: "Lima", region: "South America" },
-            { country: "Philippines", capital: "Manila", region: "Asia" },
-            { country: "Poland", capital: "Warsaw", region: "Europe" },
-            { country: "Portugal", capital: "Lisbon", region: "Europe" },
-            { country: "Qatar", capital: "Doha", region: "Asia" },
-            { country: "Romania", capital: "Bucharest", region: "Europe" },
-            { country: "Russia", capital: "Moscow", region: "Europe" },
-            { country: "Rwanda", capital: "Kigali", region: "Africa" },
-            { country: "Saint Kitts and Nevis", capital: "Basseterre", region: "North and Central America" },
-            { country: "Saint Lucia", capital: "Castries", region: "North and Central America" },
-            { country: "Saint Vincent and the Grenadines", capital: "Kingstown", region: "North and Central America" },
-            { country: "Samoa", capital: "Apia", region: "Oceania" },
-            { country: "San Marino", capital: "San Marino", region: "Europe" },
-            { country: "Sao Tome and Principe", capital: "São Tomé", region: "Africa" },
-            { country: "Saudi Arabia", capital: "Riyadh", region: "Asia" },
-            { country: "Senegal", capital: "Dakar", region: "Africa" },
-            { country: "Serbia", capital: "Belgrade", region: "Europe" },
-            { country: "Seychelles", capital: "Victoria", region: "Africa" },
-            { country: "Sierra Leone", capital: "Freetown", region: "Africa" },
-            { country: "Singapore", capital: "Singapore", region: "Asia" },
-            { country: "Slovakia", capital: "Bratislava", region: "Europe" },
-            { country: "Slovenia", capital: "Ljubljana", region: "Europe" },
-            { country: "Solomon Islands", capital: "Honiara", region: "Oceania" },
-            { country: "Somalia", capital: "Mogadishu", region: "Africa" },
-            { country: "South Africa", capital: "Pretoria", region: "Africa" },
-            { country: "South Korea", capital: "Seoul", region: "Asia" },
-            { country: "South Sudan", capital: "Juba", region: "Africa" },
-            { country: "Spain", capital: "Madrid", region: "Europe" },
-            { country: "Sri Lanka", capital: "Sri Jayawardenepura Kotte", region: "Asia" },
-            { country: "Sudan", capital: "Khartoum", region: "Africa" },
-            { country: "Suriname", capital: "Paramaribo", region: "South America" },
-            { country: "Sweden", capital: "Stockholm", region: "Europe" },
-            { country: "Switzerland", capital: "Bern", region: "Europe" },
-            { country: "Syria", capital: "Damascus", region: "Asia" },
-            { country: "Tajikistan", capital: "Dushanbe", region: "Asia" },
-            { country: "Tanzania", capital: "Dodoma", region: "Africa" },
-            { country: "Thailand", capital: "Bangkok", region: "Asia" },
-            { country: "Timor-Leste", capital: "Dili", region: "Asia" },
-            { country: "Togo", capital: "Lomé", region: "Africa" },
-            { country: "Tonga", capital: "Nuku'alofa", region: "Oceania" },
-            { country: "Trinidad and Tobago", capital: "Port of Spain", region: "North and Central America" },
-            { country: "Tunisia", capital: "Tunis", region: "Africa" },
-            { country: "Turkey", capital: "Ankara", region: "Asia" },
-            { country: "Turkmenistan", capital: "Ashgabat", region: "Asia" },
-            { country: "Tuvalu", capital: "Funafuti", region: "Oceania" },
-            { country: "Uganda", capital: "Kampala", region: "Africa" },
-            { country: "Ukraine", capital: "Kyiv", region: "Europe" },
-            { country: "United Arab Emirates", capital: "Abu Dhabi", region: "Asia" },
-            { country: "United Kingdom", capital: "London", region: "Europe" },
-            { country: "United States", capital: "Washington, D.C.", region: "North and Central America" },
-            { country: "Uruguay", capital: "Montevideo", region: "South America" },
-            { country: "Uzbekistan", capital: "Tashkent", region: "Asia" },
-            { country: "Vanuatu", capital: "Port Vila", region: "Oceania" },
-            { country: "Vatican City", capital: "Vatican City", region: "Europe" },
-            { country: "Venezuela", capital: "Caracas", region: "South America" },
-            { country: "Vietnam", capital: "Hanoi", region: "Asia" },
-            { country: "Yemen", capital: "Sana'a", region: "Asia" },
-            { country: "Zambia", capital: "Lusaka", region: "Africa" },
-            { country: "Zimbabwe", capital: "Harare", region: "Africa" }
+            { country: "Afghanistan", capital: "Kabul", region: "Asia", flag: "🇦🇫", fact: "It is the only country that has a 3.5-hour time difference when you cross its border into China." },
+            { country: "Albania", capital: "Tirana", region: "Europe", flag: "🇦🇱", fact: "In Albania, nodding your head means \"no\" and shaking your head means \"yes\"—the opposite of almost everywhere else." },
+            { country: "Algeria", capital: "Algiers", region: "Africa", flag: "🇩🇿", fact: "It is the largest country in Africa by land area, but 90% of it is covered by the Sahara Desert." },
+            { country: "Andorra", capital: "Andorra la Vella", region: "Europe", flag: "🇦🇩", fact: "It is the only country in the world where two foreign leaders (the President of France and the Bishop of Urgell) are the joint heads of state." },
+            { country: "Angola", capital: "Luanda", region: "Africa", flag: "🇦🇴", fact: "It has the highest concentration of \"Angolan Giant Sables,\" a rare antelope once thought to be extinct." },
+            { country: "Antigua and Barbuda", capital: "Saint John's", region: "North and Central America", flag: "🇦🇬", fact: "There are so many beaches here (365) that you could visit a brand-new one every single day for an entire year." },
+            { country: "Argentina", capital: "Buenos Aires", region: "South America", flag: "🇦🇷", fact: "It has the highest number of plastic surgeons per capita in the world; cosmetic surgery is so common it's culturally normalized." },
+            { country: "Armenia", capital: "Yerevan", region: "Asia", flag: "🇦🇲", fact: "Chess is a mandatory subject in all primary schools—children are taught it as a required part of the curriculum." },
+            { country: "Australia", capital: "Canberra", region: "Oceania", flag: "🇦🇺", fact: "There are more than 10 times more sheep in Australia than there are people." },
+            { country: "Austria", capital: "Vienna", region: "Europe", flag: "🇦🇹", fact: "It is illegal to name your child 'Matti' because Austrian law requires names to clearly indicate gender." },
+            { country: "Azerbaijan", capital: "Baku", region: "Asia", flag: "🇦🇿", fact: "It is home to \"Burning Mountain\" (Yanar Dag), a natural gas fire that has been burning continuously for at least 65 years." },
+            { country: "Bahamas", capital: "Nassau", region: "North and Central America", flag: "🇧🇸", fact: "It is home to the world's deepest blue hole, Dean's Blue Hole, which plunges 202 meters into the ocean floor." },
+            { country: "Bahrain", capital: "Manama", region: "Asia", flag: "🇧🇭", fact: "It is home to the \"Tree of Life,\" a 400-year-old tree that grows in the middle of a desert with no known water source." },
+            { country: "Bangladesh", capital: "Dhaka", region: "Asia", flag: "🇧🇩", fact: "It has the world's longest natural sea beach, Cox's Bazar, stretching over 120 km (75 miles)." },
+            { country: "Barbados", capital: "Bridgetown", region: "North and Central America", flag: "🇧🇧", fact: "The island was the only place in the world where grapefruit was originally found; it's a natural hybrid of an orange and a pomelo." },
+            { country: "Belarus", capital: "Minsk", region: "Europe", flag: "🇧🇾", fact: "It is the only country in Europe that still uses the death penalty." },
+            { country: "Belgium", capital: "Brussels", region: "Europe", flag: "🇧🇪", fact: "It is illegal to own only one rabbit as a pet—they must be kept in pairs because they're social animals." },
+            { country: "Belize", capital: "Belmopan", region: "North and Central America", flag: "🇧🇿", fact: "It is the only country in the world whose national flag features humans (two woodcutters) as a central part of the design." },
+            { country: "Benin", capital: "Porto-Novo", region: "Africa", flag: "🇧🇯", fact: "It is the official birthplace of the Vodun (Voodoo) religion, which is recognized as an official state religion." },
+            { country: "Bhutan", capital: "Thimphu", region: "Asia", flag: "🇧🇹", fact: "It is the only carbon-negative country in the world and measures national success via \"Gross National Happiness.\"" },
+            { country: "Bolivia", capital: "Sucre", region: "South America", flag: "🇧🇴", fact: "The Salar de Uyuni is so flat and reflective that NASA uses it to calibrate their satellites' altimeters from space." },
+            { country: "Bosnia and Herzegovina", capital: "Sarajevo", region: "Europe", flag: "🇧🇦", fact: "It is home to one of the last remaining \"primeval forests\" in Europe, Perućica, which is virtually untouched by humans." },
+            { country: "Botswana", capital: "Gaborone", region: "Africa", flag: "🇧🇼", fact: "It is home to the world's largest concentration of African elephants (roughly 130,000)." },
+            { country: "Brazil", capital: "Brasília", region: "South America", flag: "🇧🇷", fact: "There is an island called Ilha da Queimada Grande where humans are banned because there are up to five deadly vipers per square meter." },
+            { country: "Brunei", capital: "Bandar Seri Begawan", region: "Asia", flag: "🇧🇳", fact: "The Sultan of Brunei lives in the world's largest residential palace, which has 1,788 rooms and 257 bathrooms." },
+            { country: "Bulgaria", capital: "Sofia", region: "Europe", flag: "🇧🇬", fact: "It is the only country in Europe that hasn't changed its name since it was first established in 681 AD." },
+            { country: "Burkina Faso", capital: "Ouagadougou", region: "Africa", flag: "🇧🇫", fact: "The name means \"Land of Honest People.\"" },
+            { country: "Burundi", capital: "Gitega", region: "Africa", flag: "🇧🇮", fact: "It has one of the world's most famous \"man-eating\" crocodiles, Gustave, who is rumored to have killed over 300 people." },
+            { country: "Cabo Verde", capital: "Praia", region: "Africa", flag: "🇨🇻", fact: "There are more Cape Verdeans living outside the country (mostly in the US) than in the islands themselves." },
+            { country: "Cambodia", capital: "Phnom Penh", region: "Asia", flag: "🇰🇭", fact: "It is the only country in the world to feature a building (Angkor Wat) on its national flag." },
+            { country: "Cameroon", capital: "Yaoundé", region: "Africa", flag: "🇨🇲", fact: "It is known as \"Africa in Miniature\" because it contains all the major climates of the continent (desert, forest, mountains)." },
+            { country: "Canada", capital: "Ottawa", region: "North and Central America", flag: "🇨🇦", fact: "Canada has more lakes than the rest of the world's countries combined (approximately 3 million)." },
+            { country: "Central African Republic", capital: "Bangui", region: "Africa", flag: "🇨🇫", fact: "It is the best place on Earth for stargazing because it has the least light pollution of any inhabited region." },
+            { country: "Chad", capital: "N'Djamena", region: "Africa", flag: "🇹🇩", fact: "It is home to the Ennedi Plateau, where you can find desert crocodiles living in isolated pools of water." },
+            { country: "Chile", capital: "Santiago", region: "South America", flag: "🇨🇱", fact: "99% of all potatoes eaten worldwide today are genetically linked to a single species originally from a small island in southern Chile." },
+            { country: "China", capital: "Beijing", region: "Asia", flag: "🇨🇳", fact: "Despite spanning five geographical time zones, the entire country officially uses only one (Beijing Time)." },
+            { country: "Colombia", capital: "Bogotá", region: "South America", flag: "🇨🇴", fact: "It is the only country in South America that has coastlines on both the Pacific Ocean and the Caribbean Sea." },
+            { country: "Comoros", capital: "Moroni", region: "Africa", flag: "🇰🇲", fact: "It is the world's largest producer of Ylang-ylang, an essential oil used in high-end perfumes like Chanel No. 5." },
+            { country: "Republic of the Congo", capital: "Brazzaville", region: "Africa", flag: "🇨🇬", fact: "It is home to the world's second-largest rainforest (the Congo Basin), which produces 40% of the world's oxygen." },
+            { country: "Costa Rica", capital: "San José", region: "North and Central America", flag: "🇨🇷", fact: "It was the first country in the world to constitutionally abolish its national army (in 1948)." },
+            { country: "Croatia", capital: "Zagreb", region: "Europe", flag: "🇭🇷", fact: "The necktie (cravat) originated here; it was worn by Croatian mercenaries in the 17th century and adopted by the French." },
+            { country: "Cuba", capital: "Havana", region: "North and Central America", flag: "🇨🇺", fact: "It is one of the only two countries in the world where Coca-Cola cannot be legally bought or sold (the other is North Korea)." },
+            { country: "Cyprus", capital: "Nicosia", region: "Asia", flag: "🇨🇾", fact: "The entire town of Paphos is a UNESCO World Heritage site." },
+            { country: "Czech Republic", capital: "Prague", region: "Europe", flag: "🇨🇿", fact: "This country has the highest beer consumption per capita in the world—surpassing Germany and Ireland." },
+            { country: "Denmark", capital: "Copenhagen", region: "Europe", flag: "🇩🇰", fact: "The Danish flag (Dannebrog) is the oldest continuously used national flag in the world, dating back to 1219." },
+            { country: "Djibouti", capital: "Djibouti", region: "Africa", flag: "🇩🇯", fact: "It is the only place in the world where you can swim with whale sharks so close to the shore." },
+            { country: "Dominica", capital: "Roseau", region: "North and Central America", flag: "🇩🇲", fact: "It is the only nation in the world with a flag that features the color purple (on the Sisserou Parrot)." },
+            { country: "Dominican Republic", capital: "Santo Domingo", region: "North and Central America", flag: "🇩🇴", fact: "It is home to the oldest cathedral in the Americas, the Cathedral of Santa María la Menor, completed in 1541." },
+            { country: "DR Congo", capital: "Kinshasa", region: "Africa", flag: "🇨🇩", fact: "It is home to the Bonobo, the \"hippie\" ape that resolves all social conflict through affection rather than violence." },
+            { country: "Ecuador", capital: "Quito", region: "South America", flag: "🇪🇨", fact: "Because of the equatorial bulge, the summit of Mount Chimborazo is the point on Earth closest to the stars, not Mt. Everest." },
+            { country: "Egypt", capital: "Cairo", region: "Africa", flag: "🇪🇬", fact: "The Great Pyramid of Giza was the tallest man-made structure in the world for over 3,800 years." },
+            { country: "El Salvador", capital: "San Salvador", region: "North and Central America", flag: "🇸🇻", fact: "It is known as the \"Land of Volcanoes\" because it has over 20 volcanoes, many of which are still highly active." },
+            { country: "Equatorial Guinea", capital: "Malabo", region: "Africa", flag: "🇬🇶", fact: "It is the only country in Africa where Spanish is an official language." },
+            { country: "Eritrea", capital: "Asmara", region: "Africa", flag: "🇪🇷", fact: "It has no official national language; the government uses Tigrinya, Arabic, and English equally." },
+            { country: "Estonia", capital: "Tallinn", region: "Europe", flag: "🇪🇪", fact: "It was the first country in the world to allow its citizens to vote online in a general election (2005)." },
+            { country: "Eswatini", capital: "Mbabane", region: "Africa", flag: "🇸🇿", fact: "It is the last \"Absolute Monarchy\" in Africa." },
+            { country: "Ethiopia", capital: "Addis Ababa", region: "Africa", flag: "🇪🇹", fact: "It follows a calendar that is seven years and eight months behind the Gregorian calendar (it is currently 2018 there)." },
+            { country: "Fiji", capital: "Suva", region: "Oceania", flag: "🇫🇯", fact: "It is the only country in the world that has a national holiday for the Hindu festival of Diwali despite being in the Pacific." },
+            { country: "Finland", capital: "Helsinki", region: "Europe", flag: "🇫🇮", fact: "There are more saunas in Finland than there are cars (about one sauna for every two people)." },
+            { country: "France", capital: "Paris", region: "Europe", flag: "🇫🇷", fact: "Including its overseas territories, France spans 12 different time zones—more than Russia or the U.S." },
+            { country: "Gabon", capital: "Libreville", region: "Africa", flag: "🇬🇦", fact: "80% of the world's population of gorillas lives in Gabon's lush rainforests." },
+            { country: "Gambia", capital: "Banjul", region: "Africa", flag: "🇬🇲", fact: "During elections, people vote by dropping a marble into a metal drum with the candidate's picture on it." },
+            { country: "Georgia", capital: "Tbilisi", region: "Asia", flag: "🇬🇪", fact: "Evidence suggests Georgia is the \"cradle of wine,\" with wine production dating back 8,000 years." },
+            { country: "Germany", capital: "Berlin", region: "Europe", flag: "🇩🇪", fact: "There is no punishment for a prisoner who tries to escape jail, because German law recognizes the \"human instinct to be free.\"" },
+            { country: "Ghana", capital: "Accra", region: "Africa", flag: "🇬🇭", fact: "It was the first sub-Saharan African country to gain independence from colonial rule (1957)." },
+            { country: "Greece", capital: "Athens", region: "Europe", flag: "🇬🇷", fact: "No point in Greece is more than 85 miles (137 km) away from the sea." },
+            { country: "Grenada", capital: "Saint George's", region: "North and Central America", flag: "🇬🇩", fact: "Known as the \"Spice Isle,\" it produces so much nutmeg that the spice is actually featured on the national flag." },
+            { country: "Guatemala", capital: "Guatemala City", region: "North and Central America", flag: "🇬🇹", fact: "The name \"Guatemala\" comes from a Mayan word meaning \"Land of many trees,\" yet it is also the birthplace of blue denim." },
+            { country: "Guinea", capital: "Conakry", region: "Africa", flag: "🇬🇳", fact: "It contains the world's largest reserves of bauxite (the ore used to make aluminum)." },
+            { country: "Guinea-Bissau", capital: "Bissau", region: "Africa", flag: "🇬🇼", fact: "It is home to the world's only population of saltwater-dwelling hippos (in the Bijagós Archipelago)." },
+            { country: "Guyana", capital: "Georgetown", region: "South America", flag: "🇬🇾", fact: "It has the world's largest single-drop waterfall by volume, Kaieteur Falls, which is five times higher than Niagara Falls." },
+            { country: "Haiti", capital: "Port-au-Prince", region: "North and Central America", flag: "🇭🇹", fact: "It was the first country in the world to be founded by former slaves after a successful revolt against France." },
+            { country: "Honduras", capital: "Tegucigalpa", region: "North and Central America", flag: "🇭🇳", fact: "In the city of Yoro, it famously \"rains fish\" (Lluvia de Peces) once or twice a year during heavy storms." },
+            { country: "Hungary", capital: "Budapest", region: "Europe", flag: "🇭🇺", fact: "Rubik's Cube, the ballpoint pen, and the theory of the hydrogen bomb were all invented by Hungarians." },
+            { country: "Iceland", capital: "Reykjavik", region: "Europe", flag: "🇮🇸", fact: "It is the only country in the world that does not have a single mosquito." },
+            { country: "India", capital: "New Delhi", region: "Asia", flag: "🇮🇳", fact: "The village of Shani Shingnapur is famous for having no doors on any of its houses or shops—not even the bank has a lock." },
+            { country: "Indonesia", capital: "Jakarta", region: "Asia", flag: "🇮🇩", fact: "It is home to the Komodo Dragon, the largest lizard on Earth, which exists nowhere else in the wild." },
+            { country: "Iran", capital: "Tehran", region: "Asia", flag: "🇮🇷", fact: "It has had 27 different capital cities throughout its history, the most of any nation." },
+            { country: "Iraq", capital: "Baghdad", region: "Asia", flag: "🇮🇶", fact: "The world's first writing system, Cuneiform, was developed here in ancient Mesopotamia around 3200 BC." },
+            { country: "Ireland", capital: "Dublin", region: "Europe", flag: "🇮🇪", fact: "There are no wild snakes in Ireland; the climate has been too cold for them since the last Ice Age." },
+            { country: "Israel", capital: "Jerusalem", region: "Asia", flag: "🇮🇱", fact: "It is the only country in the world that entered the 21st century with a net gain in its number of trees." },
+            { country: "Italy", capital: "Rome", region: "Europe", flag: "🇮🇹", fact: "It has a \"wine fountain\" in the Abruzzo region that flows with free red wine 24 hours a day for local pilgrims." },
+            { country: "Ivory Coast", capital: "Yamoussoukro", region: "Africa", flag: "🇨🇮", fact: "It is the world's largest producer of cocoa beans, providing 40% of the world's chocolate supply." },
+            { country: "Jamaica", capital: "Kingston", region: "North and Central America", flag: "🇯🇲", fact: "Despite being a tropical island, Jamaica was the first tropical nation to enter a Winter Olympics bobsledding team." },
+            { country: "Japan", capital: "Tokyo", region: "Asia", flag: "🇯🇵", fact: "There are more \"adult diapers\" sold in Japan than baby diapers due to the rapidly aging population." },
+            { country: "Jordan", capital: "Amman", region: "Asia", flag: "🇯🇴", fact: "The Dead Sea, located here, is so salty that it is impossible for humans to sink; you will float effortlessly." },
+            { country: "Kazakhstan", capital: "Astana", region: "Asia", flag: "🇰🇿", fact: "The word \"apple\" originates here; Almaty (the former capital) means \"Place of Apples,\" where the wild ancestors of apples grew." },
+            { country: "Kenya", capital: "Nairobi", region: "Africa", flag: "🇰🇪", fact: "It is the birthplace of the \"Safari\" (the word means \"journey\" in Swahili)." },
+            { country: "Kiribati", capital: "Tarawa", region: "Oceania", flag: "🇰🇮", fact: "It is the only country in the world to be situated in all four hemispheres (North, South, East, and West)." },
+            { country: "Kosovo", capital: "Pristina", region: "Europe", flag: "🇽🇰", fact: "It has the youngest population in Europe, with over 50% of its citizens under the age of 25." },
+            { country: "Kuwait", capital: "Kuwait City", region: "Asia", flag: "🇰🇼", fact: "The Kuwaiti Dinar is the highest-valued currency unit in the world." },
+            { country: "Kyrgyzstan", capital: "Bishkek", region: "Asia", flag: "🇰🇬", fact: "It is home to the \"Epic of Manas,\" one of the world's longest poems with over 500,000 lines." },
+            { country: "Laos", capital: "Vientiane", region: "Asia", flag: "🇱🇦", fact: "It is the most heavily bombed country in history per capita (from the Vietnam War era)." },
+            { country: "Latvia", capital: "Riga", region: "Europe", flag: "🇱🇻", fact: "Latvia has one of the highest ratios of fashion models per capita in the world." },
+            { country: "Lebanon", capital: "Beirut", region: "Asia", flag: "🇱🇧", fact: "It is the only Middle Eastern country that does not have a desert." },
+            { country: "Lesotho", capital: "Maseru", region: "Africa", flag: "🇱🇸", fact: "It is the only country in the world that is entirely 1,000 meters or more above sea level." },
+            { country: "Liberia", capital: "Monrovia", region: "Africa", flag: "🇱🇷", fact: "It is one of only two African countries that was never colonized by Europeans (the other is Ethiopia)." },
+            { country: "Libya", capital: "Tripoli", region: "Africa", flag: "🇱🇾", fact: "It has the highest \"misery index\" record for temperature, hitting 58°C (136°F) in 1922." },
+            { country: "Liechtenstein", capital: "Vaduz", region: "Europe", flag: "🇱🇮", fact: "It is the world's leading producer of false teeth, manufacturing an estimated 60 million per year." },
+            { country: "Lithuania", capital: "Vilnius", region: "Europe", flag: "🇱🇹", fact: "It was the last country in Europe to officially convert from Paganism to Christianity (in 1387)." },
+            { country: "Luxembourg", capital: "Luxembourg", region: "Europe", flag: "🇱🇺", fact: "It is the first country in the world to make all public transport (trains, trams, and buses) completely free." },
+            { country: "Madagascar", capital: "Antananarivo", region: "Africa", flag: "🇲🇬", fact: "90% of the wildlife found on this island exists nowhere else on Earth." },
+            { country: "Malawi", capital: "Lilongwe", region: "Africa", flag: "🇲🇼", fact: "Lake Malawi contains more species of fish than any other lake in the world." },
+            { country: "Malaysia", capital: "Kuala Lumpur", region: "Asia", flag: "🇲🇾", fact: "It is home to the \"Rafflesia,\" the world's largest flower, which can grow up to 3 feet across and smells like rotting meat." },
+            { country: "Maldives", capital: "Malé", region: "Asia", flag: "🇲🇻", fact: "It is the flattest country in the world, with an average ground level of only 1.5 meters above sea level." },
+            { country: "Mali", capital: "Bamako", region: "Africa", flag: "🇲🇱", fact: "In the 14th century, Mali's ruler Mansa Musa was the wealthiest person in human history." },
+            { country: "Malta", capital: "Valletta", region: "Europe", flag: "🇲🇹", fact: "There are more Maltese people living in Australia (specifically Melbourne) than there are in Malta itself." },
+            { country: "Marshall Islands", capital: "Majuro", region: "Oceania", flag: "🇲🇭", fact: "It is the most \"at-risk\" nation for rising sea levels; its average elevation is only 2 meters." },
+            { country: "Mauritania", capital: "Nouakchott", region: "Africa", flag: "🇲🇷", fact: "It was the last country in the world to officially abolish slavery (in 1981, though it wasn't criminalized until 2007)." },
+            { country: "Mauritius", capital: "Port Louis", region: "Africa", flag: "🇲🇺", fact: "It was the only known home of the Dodo bird before it went extinct." },
+            { country: "Mexico", capital: "Mexico City", region: "North and Central America", flag: "🇲🇽", fact: "Mexico City is sinking at a rate of about 10–20 inches per year because it was built on a lakebed." },
+            { country: "Micronesia", capital: "Palikir", region: "Oceania", flag: "🇫🇲", fact: "On the island of Yap, they use giant stone discs (Rai stones) as a form of traditional currency." },
+            { country: "Moldova", capital: "Chișinău", region: "Europe", flag: "🇲🇩", fact: "It is home to the world's largest wine cellar, Mileștii Mici, which holds over 2 million bottles in 120 miles of tunnels." },
+            { country: "Monaco", capital: "Monaco", region: "Europe", flag: "🇲🇨", fact: "It is smaller than Central Park in New York City." },
+            { country: "Mongolia", capital: "Ulaanbaatar", region: "Asia", flag: "🇲🇳", fact: "There are roughly 66 million head of livestock in Mongolia, meaning animals outnumber people 20 to 1." },
+            { country: "Montenegro", capital: "Podgorica", region: "Europe", flag: "🇲🇪", fact: "It has a 1,600-year-old olive tree (Stara Maslina) that is still bearing fruit today." },
+            { country: "Morocco", capital: "Rabat", region: "Africa", flag: "🇲🇦", fact: "It is home to the world's oldest university, the University of Al-Karaouine, founded by a woman in 859 AD." },
+            { country: "Mozambique", capital: "Maputo", region: "Africa", flag: "🇲🇿", fact: "It is the only country name that contains all five vowels (a, e, i, o, u)." },
+            { country: "Myanmar", capital: "Naypyidaw", region: "Asia", flag: "🇲🇲", fact: "Both men and women traditionally wear \"longyi\" (a wrap-around skirt) and apply \"thanaka\" (wood bark paste) to their faces." },
+            { country: "Namibia", capital: "Windhoek", region: "Africa", flag: "🇳🇦", fact: "It has the \"Skeleton Coast,\" where the desert dunes meet the ocean and are littered with shipwrecks and whale bones." },
+            { country: "Nauru", capital: "Yaren", region: "Oceania", flag: "🇳🇷", fact: "It is the only country in the world with no official capital city." },
+            { country: "Nepal", capital: "Kathmandu", region: "Asia", flag: "🇳🇵", fact: "It is the only country in the world with a non-rectangular flag (it consists of two stacked triangles)." },
+            { country: "Netherlands", capital: "Amsterdam", region: "Europe", flag: "🇳🇱", fact: "Dutch men are the tallest in the world, with an average height of 183 cm (6 ft)." },
+            { country: "New Zealand", capital: "Wellington", region: "Oceania", flag: "🇳🇿", fact: "There are no land snakes in New Zealand—at all." },
+            { country: "Nicaragua", capital: "Managua", region: "North and Central America", flag: "🇳🇮", fact: "It is the only place in the world where you can find \"freshwater sharks\" (Lake Nicaragua)." },
+            { country: "Niger", capital: "Niamey", region: "Africa", flag: "🇳🇪", fact: "It is known as the \"Frying Pan of the World\" because it is one of the hottest countries on the planet." },
+            { country: "Nigeria", capital: "Abuja", region: "Africa", flag: "🇳🇬", fact: "It produces more movies per year than Hollywood (Nollywood is the second largest in the world after India)." },
+            { country: "North Korea", capital: "Pyongyang", region: "Asia", flag: "🇰🇵", fact: "They have their own time zone called \"Pyongyang Time\" and their own calendar year based on the birth of Kim Il-sung." },
+            { country: "North Macedonia", capital: "Skopje", region: "Europe", flag: "🇲🇰", fact: "It is the only country in the world that was once \"The Republic of Kruševo,\" a state that lasted only 10 days in 1903." },
+            { country: "Norway", capital: "Oslo", region: "Europe", flag: "🇳🇴", fact: "In the town of Longyearbyen, it is illegal to die because the permafrost prevents bodies from decomposing." },
+            { country: "Oman", capital: "Muscat", region: "Asia", flag: "🇴🇲", fact: "It is the oldest independent state in the Arab world." },
+            { country: "Pakistan", capital: "Islamabad", region: "Asia", flag: "🇵🇰", fact: "It produces over 50% of the world's hand-stitched footballs (soccer balls), mostly in the city of Sialkot." },
+            { country: "Palau", capital: "Ngerulmud", region: "Oceania", flag: "🇵🇼", fact: "It is home to \"Jellyfish Lake,\" where millions of jellyfish have lost their sting and you can swim safely among them." },
+            { country: "Palestine", capital: "Ramallah", region: "Asia", flag: "🇵🇸", fact: "Jericho is considered the oldest continuously inhabited city in the world, dating back over 11,000 years." },
+            { country: "Panama", capital: "Panama City", region: "North and Central America", flag: "🇵🇦", fact: "It is the only place in the world where you can see the sun rise over the Pacific and set over the Atlantic from the same spot." },
+            { country: "Papua New Guinea", capital: "Port Moresby", region: "Oceania", flag: "🇵🇬", fact: "It is the most linguistically diverse country on Earth, with over 800 different languages spoken." },
+            { country: "Paraguay", capital: "Asunción", region: "South America", flag: "🇵🇾", fact: "It is one of the few countries where the indigenous language (Guaraní) is spoken by more people than the colonial language (Spanish)." },
+            { country: "Peru", capital: "Lima", region: "South America", flag: "🇵🇪", fact: "Peru grows over 3,800 varieties of potatoes—enough that you could eat a different type every day for over 10 years." },
+            { country: "Philippines", capital: "Manila", region: "Asia", flag: "🇵🇭", fact: "It holds the record for the most \"social media usage\" in the world, often nicknamed the \"Social Media Capital.\"" },
+            { country: "Poland", capital: "Warsaw", region: "Europe", flag: "🇵🇱", fact: "It has the world's largest castle by land area, Malbork Castle, built by Teutonic Knights." },
+            { country: "Portugal", capital: "Lisbon", region: "Europe", flag: "🇵🇹", fact: "It is the world's largest producer of cork, providing over 50% of the world's supply." },
+            { country: "Qatar", capital: "Doha", region: "Asia", flag: "🇶🇦", fact: "It is the only country where the \"sea meets the desert\" at Khor Al Adaid (The Inland Sea)." },
+            { country: "Romania", capital: "Bucharest", region: "Europe", flag: "🇷🇴", fact: "Dracula's Castle (Bran Castle) is real, but Vlad the Impaler only visited it twice and never actually lived there." },
+            { country: "Russia", capital: "Moscow", region: "Europe", flag: "🇷🇺", fact: "Russia has a larger surface area (17.1 million km²) than the entire planet of Pluto (16.7 million km²)." },
+            { country: "Rwanda", capital: "Kigali", region: "Africa", flag: "🇷🇼", fact: "It was the first country in the world to ban plastic bags (in 2008); they even search your luggage for them at the airport." },
+            { country: "Saint Kitts and Nevis", capital: "Basseterre", region: "North and Central America", flag: "🇰🇳", fact: "It is the smallest sovereign state in the entire Western Hemisphere (both in area and population)." },
+            { country: "Saint Lucia", capital: "Castries", region: "North and Central America", flag: "🇱🇨", fact: "It is the only country in the world named after a real historical woman (Saint Lucy of Syracuse)." },
+            { country: "Saint Vincent and the Grenadines", capital: "Kingstown", region: "North and Central America", flag: "🇻🇨", fact: "The movie Pirates of the Caribbean was filmed here, and many of the set pieces were left behind for locals to keep." },
+            { country: "Samoa", capital: "Apia", region: "Oceania", flag: "🇼🇸", fact: "In 2011, the country \"skipped\" a whole day (December 30th) to jump across the International Date Line to align with trade partners." },
+            { country: "San Marino", capital: "San Marino", region: "Europe", flag: "🇸🇲", fact: "It is the oldest sovereign state and constitutional republic in the world, founded in 301 AD." },
+            { country: "Sao Tome and Principe", capital: "São Tomé", region: "Africa", flag: "🇸🇹", fact: "It is known as the \"Chocolate Islands\" because it was once the world's largest cocoa producer." },
+            { country: "Saudi Arabia", capital: "Riyadh", region: "Asia", flag: "🇸🇦", fact: "It is the largest country in the world without a single permanent river." },
+            { country: "Senegal", capital: "Dakar", region: "Africa", flag: "🇸🇳", fact: "It has a \"Pink Lake\" (Lake Retba) caused by a unique type of algae that turns the water bright pink." },
+            { country: "Serbia", capital: "Belgrade", region: "Europe", flag: "🇷🇸", fact: "It is the world's largest exporter of raspberries, accounting for nearly 30% of the global market." },
+            { country: "Seychelles", capital: "Victoria", region: "Africa", flag: "🇸🇨", fact: "It is home to the \"Coco de Mer,\" the world's largest and heaviest seed (weighing up to 30kg)." },
+            { country: "Sierra Leone", capital: "Freetown", region: "Africa", flag: "🇸🇱", fact: "It is home to the \"Cotton Tree,\" a massive tree that has stood in the center of Freetown since 1792." },
+            { country: "Singapore", capital: "Singapore", region: "Asia", flag: "🇸🇬", fact: "It is one of only three \"City-States\" in the world (the others being Monaco and Vatican City)." },
+            { country: "Slovakia", capital: "Bratislava", region: "Europe", flag: "🇸🇰", fact: "It has the highest number of castles and chateaus per capita in the world." },
+            { country: "Slovenia", capital: "Ljubljana", region: "Europe", flag: "🇸🇮", fact: "There is one vineyard for every 70 people in the country." },
+            { country: "Solomon Islands", capital: "Honiara", region: "Oceania", flag: "🇸🇧", fact: "Many locals have a unique genetic trait that gives them naturally blond hair despite having dark skin." },
+            { country: "Somalia", capital: "Mogadishu", region: "Africa", flag: "🇸🇴", fact: "It has the longest coastline on the African continent." },
+            { country: "South Africa", capital: "Pretoria", region: "Africa", flag: "🇿🇦", fact: "It has three different capital cities: Pretoria (Administrative), Cape Town (Legislative), and Bloemfontein (Judicial)." },
+            { country: "South Korea", capital: "Seoul", region: "Asia", flag: "🇰🇷", fact: "Koreans are born \"one year old\" because the time spent in the womb is counted toward their age." },
+            { country: "South Sudan", capital: "Juba", region: "Africa", flag: "🇸🇸", fact: "It is the youngest country in the world, having gained independence in 2011." },
+            { country: "Spain", capital: "Madrid", region: "Europe", flag: "🇪🇸", fact: "There is a tomato-throwing festival called La Tomatina where 150,000 tomatoes are thrown in one hour." },
+            { country: "Sri Lanka", capital: "Sri Jayawardenepura Kotte", region: "Asia", flag: "🇱🇰", fact: "It was the first country in the world to have a female Prime Minister, Sirimavo Bandaranaike, in 1960." },
+            { country: "Sudan", capital: "Khartoum", region: "Africa", flag: "🇸🇩", fact: "There are more pyramids in Sudan (over 200) than there are in the entire country of Egypt." },
+            { country: "Suriname", capital: "Paramaribo", region: "South America", flag: "🇸🇷", fact: "It is the most forested country in the world; approximately 93% of its land area is covered by lush, green jungle." },
+            { country: "Sweden", capital: "Stockholm", region: "Europe", flag: "🇸🇪", fact: "It has the most islands of any country in the world—267,570 (though only about 1,000 are inhabited)." },
+            { country: "Switzerland", capital: "Bern", region: "Europe", flag: "🇨🇭", fact: "It is illegal to own just one guinea pig because they are social animals and it's considered animal cruelty." },
+            { country: "Syria", capital: "Damascus", region: "Asia", flag: "🇸🇾", fact: "The alphabet was invented here—the first alphabetic script was developed in ancient Syria around 1500 BC." },
+            { country: "Tajikistan", capital: "Dushanbe", region: "Asia", flag: "🇹🇯", fact: "It is home to the world's second-highest dam, Nurek Dam, which is 300 meters tall." },
+            { country: "Tanzania", capital: "Dodoma", region: "Africa", flag: "🇹🇿", fact: "Rock legend Freddie Mercury (Queen) was born in Zanzibar, Tanzania." },
+            { country: "Thailand", capital: "Bangkok", region: "Asia", flag: "🇹🇭", fact: "It is the only Southeast Asian country that was never colonized by a European power." },
+            { country: "Timor-Leste", capital: "Dili", region: "Asia", flag: "🇹🇱", fact: "It is the newest country in Asia, having gained independence in 2002." },
+            { country: "Togo", capital: "Lomé", region: "Africa", flag: "🇹🇬", fact: "It is home to the Akodessewa Fetish Market, the world's largest voodoo market." },
+            { country: "Tonga", capital: "Nuku'alofa", region: "Oceania", flag: "🇹🇴", fact: "It is the only Pacific island nation that was never formally colonized by a foreign power." },
+            { country: "Trinidad and Tobago", capital: "Port of Spain", region: "North and Central America", flag: "🇹🇹", fact: "It is the birthplace of the steelpan, the only acoustic musical instrument invented in the 20th century." },
+            { country: "Tunisia", capital: "Tunis", region: "Africa", flag: "🇹🇳", fact: "Most of the original Star Wars movie was filmed here; the desert planet \"Tatooine\" is named after the Tunisian town Tataouine." },
+            { country: "Turkey", capital: "Ankara", region: "Asia", flag: "🇹🇷", fact: "It is the only country in the world located on two continents (Europe and Asia) simultaneously." },
+            { country: "Turkmenistan", capital: "Ashgabat", region: "Asia", flag: "🇹🇲", fact: "The \"Door to Hell,\" a gas crater that has been burning since Soviet engineers lit it in 1971, is located here." },
+            { country: "Tuvalu", capital: "Funafuti", region: "Oceania", flag: "🇹🇻", fact: "A huge chunk of the country's national income comes from leasing its internet domain extension: .tv." },
+            { country: "Uganda", capital: "Kampala", region: "Africa", flag: "🇺🇬", fact: "It is home to more than half of the world's remaining mountain gorilla population." },
+            { country: "Ukraine", capital: "Kyiv", region: "Europe", flag: "🇺🇦", fact: "It is home to the world's deepest artificial hole—the Kola Superdeep Borehole, drilled 12,262 meters into the Earth's crust." },
+            { country: "United Arab Emirates", capital: "Abu Dhabi", region: "Asia", flag: "🇦🇪", fact: "Dubai has \"Gold ATMs\" that dispense 24-karat gold bars and coins instead of cash." },
+            { country: "United Kingdom", capital: "London", region: "Europe", flag: "🇬🇧", fact: "The official animal of Scotland is the Unicorn." },
+            { country: "United States", capital: "Washington, D.C.", region: "North and Central America", flag: "🇺🇸", fact: "One out of every eight people in the U.S. has worked at a McDonald's at some point in their life." },
+            { country: "Uruguay", capital: "Montevideo", region: "South America", flag: "🇺🇾", fact: "It was the first country in the world to fully legalize the production, sale, and consumption of cannabis." },
+            { country: "Uzbekistan", capital: "Tashkent", region: "Asia", flag: "🇺🇿", fact: "It is one of only two \"doubly landlocked\" countries in the world (surrounded only by other landlocked countries)." },
+            { country: "Vanuatu", capital: "Port Vila", region: "Oceania", flag: "🇻🇺", fact: "This is where \"Land Diving\" originated—the ancient precursor to modern bungee jumping." },
+            { country: "Vatican City", capital: "Vatican City", region: "Europe", flag: "🇻🇦", fact: "It is the only country in the world where the birth rate is technically zero, as there are no hospitals for delivery." },
+            { country: "Venezuela", capital: "Caracas", region: "South America", flag: "🇻🇪", fact: "At the mouth of the Catatumbo River, lightning strikes up to 280 times per hour, 10 hours a day, for 160 nights a year." },
+            { country: "Vietnam", capital: "Hanoi", region: "Asia", flag: "🇻🇳", fact: "It is the world's largest exporter of cashews and the second-largest exporter of coffee." },
+            { country: "Yemen", capital: "Sana'a", region: "Asia", flag: "🇾🇪", fact: "The \"Manhattan of the Desert\" (Shibam) features 16th-century skyscrapers made entirely of mud bricks." },
+            { country: "Zambia", capital: "Lusaka", region: "Africa", flag: "🇿🇲", fact: "It is home to the \"Victoria Falls,\" the world's largest curtain of falling water." },
+            { country: "Zimbabwe", capital: "Harare", region: "Africa", flag: "🇿🇼", fact: "At one point, inflation was so bad they printed a 100 trillion dollar bill that couldn't even buy a loaf of bread." }
         ];
 
         // Fuzzy matching function for capital names
@@ -940,9 +953,15 @@
                 // Check if we've finished the first pass and have skipped countries
                 if (currentIndex >= shuffledCountries.length && skippedIndices.length > 0 && !isReviewingSkipped && hasStarted) {
                     // Start reviewing skipped countries
-                    setIsReviewingSkipped(true);
-                    setCurrentIndex(skippedIndices[0]);
-                    setSkippedIndices(prev => prev.slice(1));
+                    setTimeout(() => {
+                        setIsReviewingSkipped(true);
+                        setCurrentIndex(skippedIndices[0]);
+                        setSkippedIndices(prev => prev.slice(1));
+                        setUserInput("");
+                        setFeedback("");
+                        setFeedbackType("");
+                        setCardState("");
+                    }, 100);
                 }
             }, [currentIndex, hasStarted, skippedIndices, isReviewingSkipped, shuffledCountries.length]);
 
@@ -986,8 +1005,10 @@
             };
 
             const giveUp = () => {
-                // Mark as complete to show score screen
+                // Force end the game immediately, bypass processing flag
+                isProcessing.current = false; // Clear any processing state
                 setCurrentIndex(shuffledCountries.length);
+                setSkippedIndices([]); // Clear skipped queue so it shows completion
             };
 
             const returnToHome = () => {
@@ -1155,9 +1176,37 @@
                 );
             }
 
-            const isComplete = currentIndex >= shuffledCountries.length;
+            const isComplete = currentIndex >= shuffledCountries.length && skippedIndices.length === 0;
+            
+            // Show loading during transition to review mode
+            if (currentIndex >= shuffledCountries.length && skippedIndices.length > 0 && !isReviewingSkipped && hasStarted) {
+                return (
+                    <div className="app-container">
+                        <div className="header">
+                            <div className="logo">WorldQuiz</div>
+                            <div className="subtitle">Capital Cities Challenge</div>
+                        </div>
+                        <div className="quiz-card">
+                            <div className="completion-message" style={{ textAlign: 'center', padding: '40px 0' }}>
+                                Preparing skipped countries for review...
+                            </div>
+                        </div>
+                    </div>
+                );
+            }
+            
             const currentCountry = !isComplete ? shuffledCountries[currentIndex] : null;
-            const remaining = shuffledCountries.length - currentIndex;
+            
+            // Calculate remaining correctly - during review, don't count already completed countries
+            let remaining;
+            if (isReviewingSkipped) {
+                // During review: only count the skipped items left to review
+                remaining = skippedIndices.length + 1; // +1 for the current one being shown
+            } else {
+                // During first pass: normal countdown
+                remaining = shuffledCountries.length - currentIndex;
+            }
+            
             const totalCountries = shuffledCountries.length;
 
             return (
@@ -1188,6 +1237,14 @@
 
                             <div className={`quiz-card ${cardState}`}>
                                 <div className="country-name">{currentCountry.country}</div>
+                                <div style={{ fontSize: '64px', textAlign: 'center', marginBottom: '24px' }}>
+                                    {currentCountry.flag}
+                                </div>
+                                {currentCountry.fact && (
+                                    <div className="fun-fact">
+                                        💡 {currentCountry.fact}
+                                    </div>
+                                )}
                                 <div className="input-wrapper">
                                     <input
                                         ref={inputRef}
@@ -1258,8 +1315,7 @@
                                     {completedCount === totalCountries ? "Perfect Score!" : "Game Complete!"}
                                 </div>
                                 <div className="completion-message">
-                                    Score: <strong>{completedCount} / {totalCountries}</strong><br/>
-                                    Correct: {completedCount} | Skipped: {skippedCount}
+                                    Score: <strong>{completedCount} / {totalCountries}</strong>
                                     {completedCount === totalCountries && (
                                         <>
                                             <br/><br/>
