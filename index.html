@@ -412,94 +412,6 @@
             border-left: 3px solid var(--accent-secondary);
         }
 
-        .correct-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(10, 14, 26, 0.95);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .correct-display {
-            background: var(--bg-card);
-            border: 2px solid var(--correct);
-            border-radius: 20px;
-            padding: 40px;
-            max-width: 500px;
-            text-align: center;
-            animation: slideUp 0.4s ease;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .correct-checkmark {
-            font-size: 64px;
-            margin-bottom: 20px;
-        }
-
-        .correct-capital-name {
-            font-size: 32px;
-            font-weight: 700;
-            color: var(--correct);
-            margin-bottom: 30px;
-        }
-
-        .map-container {
-            width: 100%;
-            height: 300px;
-            background: var(--bg-secondary);
-            border-radius: 12px;
-            overflow: hidden;
-            position: relative;
-            margin-bottom: 20px;
-        }
-
-        .map-placeholder {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            color: var(--text-secondary);
-        }
-
-        .capital-marker {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: var(--correct);
-            border: 3px solid white;
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            animation: pulse 1.5s ease-in-out infinite;
-            box-shadow: 0 0 20px rgba(0, 255, 136, 0.6);
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                transform: translate(-50%, -50%) scale(1);
-            }
-            50% {
-                transform: translate(-50%, -50%) scale(1.3);
-            }
-        }
-
         .completion-screen {
             text-align: center;
             animation: fadeIn 0.6s ease;
@@ -577,14 +489,14 @@
             { country: "Argentina", capital: "Buenos Aires", region: "South America", flag: "🇦🇷", fact: "It has the highest number of plastic surgeons per capita in the world; cosmetic surgery is so common it's culturally normalized." },
             { country: "Armenia", capital: "Yerevan", region: "Asia", flag: "🇦🇲", fact: "Chess is a mandatory subject in all primary schools—children are taught it as a required part of the curriculum." },
             { country: "Australia", capital: "Canberra", region: "Oceania", flag: "🇦🇺", fact: "There are more than 10 times more sheep in Australia than there are people." },
-            { country: "Austria", capital: "Vienna", region: "Europe", flag: "🇦🇹", fact: "It is illegal to name your child 'Matti' because Austrian law requires names to clearly indicate gender." },
+            { country: "Austria", capital: "Vienna", region: "Europe", flag: "🇦🇹", fact: "Vienna has the world's oldest zoo, Tiergarten Schönbrunn, which has been operating since 1752." },
             { country: "Azerbaijan", capital: "Baku", region: "Asia", flag: "🇦🇿", fact: "It is home to \"Burning Mountain\" (Yanar Dag), a natural gas fire that has been burning continuously for at least 65 years." },
             { country: "Bahamas", capital: "Nassau", region: "North and Central America", flag: "🇧🇸", fact: "It is home to the world's deepest blue hole, Dean's Blue Hole, which plunges 202 meters into the ocean floor." },
             { country: "Bahrain", capital: "Manama", region: "Asia", flag: "🇧🇭", fact: "It is home to the \"Tree of Life,\" a 400-year-old tree that grows in the middle of a desert with no known water source." },
             { country: "Bangladesh", capital: "Dhaka", region: "Asia", flag: "🇧🇩", fact: "It has the world's longest natural sea beach, Cox's Bazar, stretching over 120 km (75 miles)." },
             { country: "Barbados", capital: "Bridgetown", region: "North and Central America", flag: "🇧🇧", fact: "The island was the only place in the world where grapefruit was originally found; it's a natural hybrid of an orange and a pomelo." },
             { country: "Belarus", capital: "Minsk", region: "Europe", flag: "🇧🇾", fact: "It is the only country in Europe that still uses the death penalty." },
-            { country: "Belgium", capital: "Brussels", region: "Europe", flag: "🇧🇪", fact: "It is illegal to own only one rabbit as a pet—they must be kept in pairs because they're social animals." },
+            { country: "Belgium", capital: "Brussels", region: "Europe", flag: "🇧🇪", fact: "Brussels Airport sells more chocolate than any other single location on Earth." },
             { country: "Belize", capital: "Belmopan", region: "North and Central America", flag: "🇧🇿", fact: "It is the only country in the world whose national flag features humans (two woodcutters) as a central part of the design." },
             { country: "Benin", capital: "Porto-Novo", region: "Africa", flag: "🇧🇯", fact: "It is the official birthplace of the Vodun (Voodoo) religion, which is recognized as an official state religion." },
             { country: "Bhutan", capital: "Thimphu", region: "Asia", flag: "🇧🇹", fact: "It is the only carbon-negative country in the world and measures national success via \"Gross National Happiness.\"" },
@@ -606,7 +518,7 @@
             { country: "China", capital: "Beijing", region: "Asia", flag: "🇨🇳", fact: "Despite spanning five geographical time zones, the entire country officially uses only one (Beijing Time)." },
             { country: "Colombia", capital: "Bogotá", region: "South America", flag: "🇨🇴", fact: "It is the only country in South America that has coastlines on both the Pacific Ocean and the Caribbean Sea." },
             { country: "Comoros", capital: "Moroni", region: "Africa", flag: "🇰🇲", fact: "It is the world's largest producer of Ylang-ylang, an essential oil used in high-end perfumes like Chanel No. 5." },
-            { country: "Republic of the Congo", capital: "Brazzaville", region: "Africa", flag: "🇨🇬", fact: "It is home to the world's second-largest rainforest (the Congo Basin), which produces 40% of the world's oxygen." },
+            { country: "Congo (Congo-Brazzaville)", capital: "Brazzaville", region: "Africa", flag: "🇨🇬", fact: "It is home to the \"Odzala-Kokoua National Park,\" one of the most important strongholds for Western Lowland Gorillas." },
             { country: "Costa Rica", capital: "San José", region: "North and Central America", flag: "🇨🇷", fact: "It was the first country in the world to constitutionally abolish its national army (in 1948)." },
             { country: "Croatia", capital: "Zagreb", region: "Europe", flag: "🇭🇷", fact: "The necktie (cravat) originated here; it was worn by Croatian mercenaries in the 17th century and adopted by the French." },
             { country: "Cuba", capital: "Havana", region: "North and Central America", flag: "🇨🇺", fact: "It is one of the only two countries in the world where Coca-Cola cannot be legally bought or sold (the other is North Korea)." },
@@ -710,7 +622,7 @@
             { country: "Poland", capital: "Warsaw", region: "Europe", flag: "🇵🇱", fact: "It has the world's largest castle by land area, Malbork Castle, built by Teutonic Knights." },
             { country: "Portugal", capital: "Lisbon", region: "Europe", flag: "🇵🇹", fact: "It is the world's largest producer of cork, providing over 50% of the world's supply." },
             { country: "Qatar", capital: "Doha", region: "Asia", flag: "🇶🇦", fact: "It is the only country where the \"sea meets the desert\" at Khor Al Adaid (The Inland Sea)." },
-            { country: "Romania", capital: "Bucharest", region: "Europe", flag: "🇷🇴", fact: "Dracula's Castle (Bran Castle) is real, but Vlad the Impaler only visited it twice and never actually lived there." },
+            { country: "Romania", capital: "Bucharest", region: "Europe", flag: "🇷🇴", fact: "The Palace of the Parliament in Bucharest is the heaviest building in the world, made of 700,000 tons of steel and bronze." },
             { country: "Russia", capital: "Moscow", region: "Europe", flag: "🇷🇺", fact: "Russia has a larger surface area (17.1 million km²) than the entire planet of Pluto (16.7 million km²)." },
             { country: "Rwanda", capital: "Kigali", region: "Africa", flag: "🇷🇼", fact: "It was the first country in the world to ban plastic bags (in 2008); they even search your luggage for them at the airport." },
             { country: "Saint Kitts and Nevis", capital: "Basseterre", region: "North and Central America", flag: "🇰🇳", fact: "It is the smallest sovereign state in the entire Western Hemisphere (both in area and population)." },
@@ -732,13 +644,13 @@
             { country: "South Africa", capital: "Pretoria", region: "Africa", flag: "🇿🇦", fact: "It has three different capital cities: Pretoria (Administrative), Cape Town (Legislative), and Bloemfontein (Judicial)." },
             { country: "South Korea", capital: "Seoul", region: "Asia", flag: "🇰🇷", fact: "Koreans are born \"one year old\" because the time spent in the womb is counted toward their age." },
             { country: "South Sudan", capital: "Juba", region: "Africa", flag: "🇸🇸", fact: "It is the youngest country in the world, having gained independence in 2011." },
-            { country: "Spain", capital: "Madrid", region: "Europe", flag: "🇪🇸", fact: "There is a tomato-throwing festival called La Tomatina where 150,000 tomatoes are thrown in one hour." },
+            { country: "Spain", capital: "Madrid", region: "Europe", flag: "🇪🇸", fact: "The world's oldest existing restaurant, Sobrino de Botín, has been open in Madrid since 1725." },
             { country: "Sri Lanka", capital: "Sri Jayawardenepura Kotte", region: "Asia", flag: "🇱🇰", fact: "It was the first country in the world to have a female Prime Minister, Sirimavo Bandaranaike, in 1960." },
             { country: "Sudan", capital: "Khartoum", region: "Africa", flag: "🇸🇩", fact: "There are more pyramids in Sudan (over 200) than there are in the entire country of Egypt." },
             { country: "Suriname", capital: "Paramaribo", region: "South America", flag: "🇸🇷", fact: "It is the most forested country in the world; approximately 93% of its land area is covered by lush, green jungle." },
             { country: "Sweden", capital: "Stockholm", region: "Europe", flag: "🇸🇪", fact: "It has the most islands of any country in the world—267,570 (though only about 1,000 are inhabited)." },
             { country: "Switzerland", capital: "Bern", region: "Europe", flag: "🇨🇭", fact: "It is illegal to own just one guinea pig because they are social animals and it's considered animal cruelty." },
-            { country: "Syria", capital: "Damascus", region: "Asia", flag: "🇸🇾", fact: "The alphabet was invented here—the first alphabetic script was developed in ancient Syria around 1500 BC." },
+            { country: "Syria", capital: "Damascus", region: "Asia", flag: "🇸🇾", fact: "Damascus is often cited as the oldest continuously inhabited capital city in the world." },
             { country: "Tajikistan", capital: "Dushanbe", region: "Asia", flag: "🇹🇯", fact: "It is home to the world's second-highest dam, Nurek Dam, which is 300 meters tall." },
             { country: "Tanzania", capital: "Dodoma", region: "Africa", flag: "🇹🇿", fact: "Rock legend Freddie Mercury (Queen) was born in Zanzibar, Tanzania." },
             { country: "Thailand", capital: "Bangkok", region: "Asia", flag: "🇹🇭", fact: "It is the only Southeast Asian country that was never colonized by a European power." },
@@ -751,7 +663,7 @@
             { country: "Turkmenistan", capital: "Ashgabat", region: "Asia", flag: "🇹🇲", fact: "The \"Door to Hell,\" a gas crater that has been burning since Soviet engineers lit it in 1971, is located here." },
             { country: "Tuvalu", capital: "Funafuti", region: "Oceania", flag: "🇹🇻", fact: "A huge chunk of the country's national income comes from leasing its internet domain extension: .tv." },
             { country: "Uganda", capital: "Kampala", region: "Africa", flag: "🇺🇬", fact: "It is home to more than half of the world's remaining mountain gorilla population." },
-            { country: "Ukraine", capital: "Kyiv", region: "Europe", flag: "🇺🇦", fact: "It is home to the world's deepest artificial hole—the Kola Superdeep Borehole, drilled 12,262 meters into the Earth's crust." },
+            { country: "Ukraine", capital: "Kyiv", region: "Europe", flag: "🇺🇦", fact: "The world's deepest metro station is Arsenalna in Kyiv, located 105.5 meters underground." },
             { country: "United Arab Emirates", capital: "Abu Dhabi", region: "Asia", flag: "🇦🇪", fact: "Dubai has \"Gold ATMs\" that dispense 24-karat gold bars and coins instead of cash." },
             { country: "United Kingdom", capital: "London", region: "Europe", flag: "🇬🇧", fact: "The official animal of Scotland is the Unicorn." },
             { country: "United States", capital: "Washington, D.C.", region: "North and Central America", flag: "🇺🇸", fact: "One out of every eight people in the U.S. has worked at a McDonald's at some point in their life." },
@@ -1017,8 +929,8 @@
             const [completedCount, setCompletedCount] = useState(0);
             const [selectedRegions, setSelectedRegions] = useState([]);
             const [isReviewingSkipped, setIsReviewingSkipped] = useState(false);
-            const [showCorrectOverlay, setShowCorrectOverlay] = useState(false);
-            const [correctCapital, setCorrectCapital] = useState("");
+            const [elapsedTime, setElapsedTime] = useState(0);
+            const [timerActive, setTimerActive] = useState(false);
             const inputRef = useRef(null);
             const isProcessing = useRef(false);
 
@@ -1055,6 +967,20 @@
                 }
             }, [currentIndex, hasStarted, skippedIndices, isReviewingSkipped, shuffledCountries.length]);
 
+            useEffect(() => {
+                let interval;
+                if (timerActive && currentIndex < shuffledCountries.length) {
+                    interval = setInterval(() => {
+                        setElapsedTime(prev => prev + 1);
+                    }, 1000);
+                } else if (currentIndex >= shuffledCountries.length && timerActive) {
+                    setTimerActive(false);
+                }
+                return () => {
+                    if (interval) clearInterval(interval);
+                };
+            }, [timerActive, currentIndex, shuffledCountries.length]);
+
             const getFilteredCountries = () => {
                 if (selectedRegions.length === 0) {
                     return COUNTRIES; // All countries
@@ -1075,6 +1001,8 @@
                 setSkippedIndices([]);
                 setCompletedCount(0);
                 setIsReviewingSkipped(false);
+                setElapsedTime(0);
+                setTimerActive(true);
                 isProcessing.current = false;
             };
 
@@ -1091,6 +1019,8 @@
                 setSkippedIndices([]);
                 setCompletedCount(0);
                 setIsReviewingSkipped(false);
+                setElapsedTime(0);
+                setTimerActive(true);
                 isProcessing.current = false;
             };
 
@@ -1184,36 +1114,27 @@
                     setFeedback("Correct!");
                     setFeedbackType("correct");
                     setCardState("correct");
-                    
-                    // Show the correct answer overlay
-                    setCorrectCapital(currentCountry.capital);
-                    setShowCorrectOverlay(true);
 
-                    // Wait 5 seconds before moving to next country
                     setTimeout(() => {
-                        setShowCorrectOverlay(false);
-                        
-                        setTimeout(() => {
-                            if (isReviewingSkipped) {
-                                // Move to next skipped item
-                                if (skippedIndices.length > 0) {
-                                    setCurrentIndex(skippedIndices[0]);
-                                    setSkippedIndices(prev => prev.slice(1));
-                                } else {
-                                    // No more skipped items, end game
-                                    setCurrentIndex(shuffledCountries.length);
-                                }
+                        if (isReviewingSkipped) {
+                            // Move to next skipped item
+                            if (skippedIndices.length > 0) {
+                                setCurrentIndex(skippedIndices[0]);
+                                setSkippedIndices(prev => prev.slice(1));
                             } else {
-                                // Normal progression
-                                setCurrentIndex(prev => prev + 1);
+                                // No more skipped items, end game
+                                setCurrentIndex(shuffledCountries.length);
                             }
-                            setUserInput("");
-                            setFeedback("");
-                            setFeedbackType("");
-                            setCardState("");
-                            isProcessing.current = false;
-                        }, 300);
-                    }, 5000);
+                        } else {
+                            // Normal progression
+                            setCurrentIndex(prev => prev + 1);
+                        }
+                        setUserInput("");
+                        setFeedback("");
+                        setFeedbackType("");
+                        setCardState("");
+                        isProcessing.current = false;
+                    }, 600);
                 }
             };
 
@@ -1308,40 +1229,6 @@
             
             const totalCountries = shuffledCountries.length;
 
-            // Render correct answer overlay
-            if (showCorrectOverlay && currentCountry) {
-                // Get country code for flag image (ISO 3166-1 alpha-2)
-                const countryCode = currentCountry.flag.codePointAt(0).toString(16).slice(-2) + 
-                                   currentCountry.flag.codePointAt(2).toString(16).slice(-2);
-                const flagUrl = `https://flagcdn.com/w320/${countryCode}.png`;
-                
-                return (
-                    <div className="correct-overlay">
-                        <div className="correct-display">
-                            <div className="correct-checkmark">✓</div>
-                            <div className="correct-capital-name">{correctCapital}</div>
-                            <div className="map-container">
-                                <div className="map-placeholder">
-                                    <img 
-                                        src={flagUrl} 
-                                        alt={`${currentCountry.country} flag`}
-                                        style={{ 
-                                            width: '200px', 
-                                            height: 'auto', 
-                                            marginBottom: '20px',
-                                            borderRadius: '8px',
-                                            boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
-                                        }}
-                                    />
-                                    <div style={{ fontSize: '18px', fontWeight: '600', color: 'var(--text-primary)' }}>{currentCountry.country}</div>
-                                    <div className="capital-marker" style={{ top: '50%', left: '50%' }}></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                );
-            }
-
             return (
                 <div className="app-container">
                     <div className="header">
@@ -1365,6 +1252,13 @@
                                 <div className="progress-stat">
                                     <div className="progress-label">Skipped</div>
                                     <div className="progress-value">{skippedCount}</div>
+                                </div>
+                                <div className="divider"></div>
+                                <div className="progress-stat">
+                                    <div className="progress-label">Time</div>
+                                    <div className="progress-value" style={{ fontFamily: 'Space Mono, monospace' }}>
+                                        {Math.floor(elapsedTime / 60)}:{String(elapsedTime % 60).padStart(2, '0')}
+                                    </div>
                                 </div>
                             </div>
 
@@ -1449,6 +1343,10 @@
                                 </div>
                                 <div className="completion-message">
                                     Score: <strong>{completedCount} / {totalCountries}</strong>
+                                    <br/>
+                                    Time: <strong style={{ fontFamily: 'Space Mono, monospace' }}>
+                                        {Math.floor(elapsedTime / 60)}:{String(elapsedTime % 60).padStart(2, '0')}
+                                    </strong>
                                     {completedCount === totalCountries && (
                                         <>
                                             <br/><br/>
