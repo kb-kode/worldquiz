@@ -446,28 +446,138 @@
 
         @media (max-width: 600px) {
             .app-container {
-                padding: 40px 16px;
+                padding: 20px 12px;
+            }
+
+            .header {
+                margin-bottom: 20px;
             }
 
             .logo {
-                font-size: 36px;
+                font-size: 32px;
             }
 
-            .country-name {
-                font-size: 28px;
+            .subtitle {
+                font-size: 12px;
             }
 
-            .capital-input {
-                font-size: 18px;
-                padding: 16px 20px;
+            .progress-bar {
+                flex-wrap: wrap;
+                gap: 8px;
+                padding: 12px;
+            }
+
+            .progress-stat {
+                min-width: calc(50% - 4px);
+            }
+
+            .divider {
+                display: none;
+            }
+
+            .progress-label {
+                font-size: 11px;
             }
 
             .progress-value {
-                font-size: 24px;
+                font-size: 20px;
             }
 
             .quiz-card {
-                padding: 32px 24px;
+                padding: 24px 16px;
+            }
+
+            .country-name {
+                font-size: 24px;
+                margin-bottom: 16px;
+            }
+
+            .fun-fact {
+                font-size: 12px;
+                padding: 10px;
+            }
+
+            .capital-input {
+                font-size: 16px;
+                padding: 14px 16px;
+            }
+
+            .feedback {
+                font-size: 16px;
+            }
+
+            .restart-button {
+                font-size: 14px;
+                padding: 12px 16px;
+            }
+
+            .region-button {
+                font-size: 13px;
+                padding: 12px 16px;
+            }
+
+            .start-button {
+                font-size: 16px;
+                padding: 16px 32px;
+            }
+
+            /* Mobile Sidebar Adjustments */
+            .progress-sidebar {
+                width: 100%;
+                right: -100%;
+            }
+
+            .sidebar-toggle {
+                padding: 16px 10px;
+                font-size: 13px;
+            }
+
+            .sidebar-title {
+                font-size: 18px;
+            }
+
+            .region-title {
+                font-size: 14px;
+                padding: 8px 10px;
+            }
+
+            .country-item {
+                font-size: 13px;
+                padding: 6px 10px;
+            }
+
+            /* Completion Screen Mobile */
+            .completion-icon {
+                font-size: 60px;
+            }
+
+            .completion-title {
+                font-size: 28px;
+            }
+
+            .completion-message {
+                font-size: 16px;
+            }
+
+            /* Better touch targets for mobile */
+            button {
+                min-height: 44px;
+            }
+
+            input {
+                font-size: 16px !important; /* Prevent iOS zoom */
+            }
+        }
+
+        /* Tablet breakpoint */
+        @media (max-width: 900px) and (min-width: 601px) {
+            .progress-sidebar {
+                width: 350px;
+                right: -350px;
+            }
+
+            .sidebar-toggle {
+                font-size: 14px;
             }
         }
 
