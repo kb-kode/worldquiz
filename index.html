@@ -470,6 +470,141 @@
                 padding: 32px 24px;
             }
         }
+
+        /* Sidebar Styles */
+        .sidebar-toggle {
+            position: fixed;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--bg-card);
+            border: 2px solid var(--accent-primary);
+            border-right: none;
+            color: var(--accent-primary);
+            padding: 20px 12px;
+            cursor: pointer;
+            border-radius: 8px 0 0 8px;
+            font-weight: 600;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+        }
+
+        .sidebar-toggle:hover {
+            background: var(--accent-primary);
+            color: var(--bg-primary);
+        }
+
+        .progress-sidebar {
+            position: fixed;
+            right: -450px;
+            top: 0;
+            width: 450px;
+            height: 100vh;
+            background: var(--bg-card);
+            border-left: 2px solid var(--accent-primary);
+            overflow-y: auto;
+            transition: right 0.3s ease;
+            z-index: 999;
+            padding: 20px;
+        }
+
+        .progress-sidebar.open {
+            right: 0;
+        }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .sidebar-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--accent-primary);
+        }
+
+        .sidebar-close {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .region-section {
+            margin-bottom: 30px;
+        }
+
+        .region-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--accent-secondary);
+            margin-bottom: 12px;
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 6px;
+        }
+
+        .region-title:hover {
+            background: rgba(123, 104, 238, 0.1);
+        }
+
+        .region-chevron {
+            font-size: 12px;
+            transition: transform 0.3s;
+        }
+
+        .region-chevron.expanded {
+            transform: rotate(90deg);
+        }
+
+        .region-countries {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .region-countries.expanded {
+            max-height: 2000px;
+        }
+
+        .country-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 12px;
+            margin-bottom: 4px;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .country-item.answered {
+            background: rgba(0, 255, 136, 0.1);
+            border-left: 3px solid var(--correct);
+        }
+
+        .country-item.unanswered {
+            background: rgba(255, 255, 255, 0.03);
+            opacity: 0.5;
+        }
+
+        .country-capital {
+            color: var(--text-secondary);
+            font-family: 'Space Mono', monospace;
+            font-size: 13px;
+        }
     </style>
 </head>
 <body>
@@ -931,6 +1066,11 @@
             const [isReviewingSkipped, setIsReviewingSkipped] = useState(false);
             const [elapsedTime, setElapsedTime] = useState(0);
             const [timerActive, setTimerActive] = useState(false);
+            const [answeredCountries, setAnsweredCountries] = useState([]);
+            const [sidebarOpen, setSidebarOpen] = useState(false);
+            const [expandedRegions, setExpandedRegions] = useState({});
+            const [hintsRemaining, setHintsRemaining] = useState(10);
+            const [revealedLetters, setRevealedLetters] = useState(0);
             const inputRef = useRef(null);
             const isProcessing = useRef(false);
 
@@ -1003,6 +1143,9 @@
                 setIsReviewingSkipped(false);
                 setElapsedTime(0);
                 setTimerActive(true);
+                setAnsweredCountries([]);
+                setHintsRemaining(10);
+                setRevealedLetters(0);
                 isProcessing.current = false;
             };
 
@@ -1021,6 +1164,9 @@
                 setIsReviewingSkipped(false);
                 setElapsedTime(0);
                 setTimerActive(true);
+                setAnsweredCountries([]);
+                setHintsRemaining(10);
+                setRevealedLetters(0);
                 isProcessing.current = false;
             };
 
@@ -1062,10 +1208,66 @@
                 setSelectedRegions([]);
             };
 
+            const handleHint = () => {
+                if (hintsRemaining <= 0) {
+                    setFeedback("No hints remaining!");
+                    setFeedbackType("incorrect");
+                    setTimeout(() => {
+                        setFeedback("");
+                        setFeedbackType("");
+                    }, 1500);
+                    return;
+                }
+
+                const currentCountry = shuffledCountries[currentIndex];
+                const capital = currentCountry.capital;
+                const capitalLength = capital.length;
+
+                const newRevealedCount = revealedLetters + 1;
+                setRevealedLetters(newRevealedCount);
+                setHintsRemaining(prev => prev - 1);
+
+                if (newRevealedCount >= capitalLength) {
+                    isProcessing.current = true;
+                    setCompletedCount(prev => prev + 1);
+                    setAnsweredCountries(prev => [...prev, currentCountry.country]);
+                    setUserInput(capital);
+                    setFeedback("Solved with hints!");
+                    setFeedbackType("correct");
+                    setCardState("correct");
+
+                    setTimeout(() => {
+                        setRevealedLetters(0);
+                        if (isReviewingSkipped) {
+                            if (skippedIndices.length > 0) {
+                                setCurrentIndex(skippedIndices[0]);
+                                setSkippedIndices(prev => prev.slice(1));
+                            } else {
+                                setCurrentIndex(shuffledCountries.length);
+                            }
+                        } else {
+                            setCurrentIndex(prev => prev + 1);
+                        }
+                        setUserInput("");
+                        setFeedback("");
+                        setFeedbackType("");
+                        setCardState("");
+                        isProcessing.current = false;
+                    }, 600);
+                } else {
+                    setFeedback(`${newRevealedCount} letter${newRevealedCount > 1 ? 's' : ''} revealed`);
+                    setFeedbackType("");
+                    setTimeout(() => {
+                        setFeedback("");
+                    }, 1500);
+                }
+            };
+
             const handleSkip = () => {
                 if (isProcessing.current) return;
                 
                 isProcessing.current = true;
+                setRevealedLetters(0);
                 
                 if (isReviewingSkipped) {
                     // During review, just move to next skipped item without re-adding
@@ -1111,11 +1313,13 @@
                 if (isCorrectCapital(value, currentCountry.capital)) {
                     isProcessing.current = true;
                     setCompletedCount(prev => prev + 1);
+                    setAnsweredCountries(prev => [...prev, currentCountry.country]);
                     setFeedback("Correct!");
                     setFeedbackType("correct");
                     setCardState("correct");
 
                     setTimeout(() => {
+                        setRevealedLetters(0);
                         if (isReviewingSkipped) {
                             // Move to next skipped item
                             if (skippedIndices.length > 0) {
@@ -1229,6 +1433,65 @@
             
             const totalCountries = shuffledCountries.length;
 
+            // Generate sidebar content by region
+            const renderSidebarContent = () => {
+                const regions = REGIONS;
+                const filtered = getFilteredCountries();
+                
+                const toggleRegion = (region) => {
+                    setExpandedRegions(prev => ({
+                        ...prev,
+                        [region]: !prev[region]
+                    }));
+                };
+                
+                return regions.map(region => {
+                    const countriesInRegion = filtered.filter(c => c.region === region);
+                    if (countriesInRegion.length === 0) return null;
+                    
+                    const isExpanded = expandedRegions[region];
+                    const answeredInRegion = countriesInRegion.filter(c => 
+                        answeredCountries.includes(c.country)
+                    ).length;
+                    
+                    // Sort alphabetically by capital
+                    const sorted = [...countriesInRegion].sort((a, b) => 
+                        a.capital.localeCompare(b.capital)
+                    );
+                    
+                    return (
+                        <div key={region} className="region-section">
+                            <div 
+                                className="region-title" 
+                                onClick={() => toggleRegion(region)}
+                            >
+                                <span>
+                                    {region} ({answeredInRegion}/{countriesInRegion.length})
+                                </span>
+                                <span className={`region-chevron ${isExpanded ? 'expanded' : ''}`}>
+                                    ▶
+                                </span>
+                            </div>
+                            <div className={`region-countries ${isExpanded ? 'expanded' : ''}`}>
+                                {sorted.map(country => {
+                                    const isAnswered = answeredCountries.includes(country.country);
+                                    return (
+                                        <div 
+                                            key={country.country} 
+                                            className={`country-item ${isAnswered ? 'answered' : 'unanswered'}`}
+                                        >
+                                            <span>
+                                                {isAnswered ? `${country.capital}, ${country.country}` : '???'}
+                                            </span>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    );
+                });
+            };
+
             return (
                 <div className="app-container">
                     <div className="header">
@@ -1272,6 +1535,25 @@
                                         💡 {currentCountry.fact}
                                     </div>
                                 )}
+                                
+                                {/* Hint Display */}
+                                {revealedLetters > 0 && (
+                                    <div style={{
+                                        textAlign: 'center',
+                                        fontSize: '32px',
+                                        fontFamily: 'Space Mono, monospace',
+                                        color: 'var(--accent-primary)',
+                                        marginBottom: '16px',
+                                        letterSpacing: '8px',
+                                        fontWeight: 'bold'
+                                    }}>
+                                        {currentCountry.capital.substring(0, revealedLetters)}
+                                        <span style={{ color: 'var(--text-secondary)' }}>
+                                            {'_'.repeat(currentCountry.capital.length - revealedLetters)}
+                                        </span>
+                                    </div>
+                                )}
+                                
                                 <div className="input-wrapper">
                                     <input
                                         ref={inputRef}
@@ -1289,6 +1571,21 @@
                             </div>
 
                             <div style={{ display: 'flex', gap: '12px', marginBottom: '12px' }}>
+                                <button 
+                                    className="restart-button" 
+                                    style={{ 
+                                        flex: 1, 
+                                        background: hintsRemaining > 0 ? 'var(--bg-secondary)' : 'var(--bg-card)',
+                                        border: hintsRemaining > 0 ? '2px solid var(--accent-primary)' : '2px solid var(--text-secondary)',
+                                        color: hintsRemaining > 0 ? 'var(--accent-primary)' : 'var(--text-secondary)',
+                                        cursor: hintsRemaining > 0 ? 'pointer' : 'not-allowed',
+                                        opacity: hintsRemaining > 0 ? 1 : 0.5
+                                    }}
+                                    onClick={handleHint}
+                                    disabled={hintsRemaining <= 0}
+                                >
+                                    💡 Hint ({hintsRemaining})
+                                </button>
                                 <button 
                                     className="restart-button" 
                                     style={{ 
@@ -1383,6 +1680,32 @@
                                 </div>
                             </div>
                         </div>
+                    )}
+
+                    {/* Sidebar Toggle Button */}
+                    {hasStarted && !isComplete && (
+                        <>
+                            <button 
+                                className="sidebar-toggle" 
+                                onClick={() => setSidebarOpen(!sidebarOpen)}
+                            >
+                                {sidebarOpen ? 'Close' : 'Progress'}
+                            </button>
+
+                            {/* Progress Sidebar */}
+                            <div className={`progress-sidebar ${sidebarOpen ? 'open' : ''}`}>
+                                <div className="sidebar-header">
+                                    <div className="sidebar-title">Progress by Region</div>
+                                    <button 
+                                        className="sidebar-close" 
+                                        onClick={() => setSidebarOpen(false)}
+                                    >
+                                        ×
+                                    </button>
+                                </div>
+                                {renderSidebarContent()}
+                            </div>
+                        </>
                     )}
                 </div>
             );
